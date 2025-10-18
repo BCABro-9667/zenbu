@@ -1,3 +1,136 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "Stylish living room with modern furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1600210491369-e753d80a41f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBsaXZpbmdyb29tfGVufDB8fHx8MTc2MDczNDk2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern livingroom"
+    },
+    {
+      "id": "hero-2",
+      "description": "Minimalist bedroom with large window",
+      "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtaW5pbWFsaXN0JTIwYmVkcm9vbXxlbnwwfHx8fDE3NjA3NjE5MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist bedroom"
+    },
+    {
+      "id": "hero-3",
+      "description": "Cozy reading corner with armchair and lamp",
+      "imageUrl": "https://images.unsplash.com/photo-1602418514663-a1ee3c1cc626?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyZWFkaW5nJTIwY29ybmVyfGVufDB8fHx8MTc2MDc5MDI3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "reading corner"
+    },
+    {
+      "id": "banner-1",
+      "description": "A person assembling modern furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1681731060681-5b6ae61f6a3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmdXJuaXR1cmUlMjBhc3NlbWJseXxlbnwwfHx8fDE3NjA3ODA4MTZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "furniture assembly"
+    },
+    {
+      "id": "category-1",
+      "description": "Living room furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzb2ZhfGVufDB8fHx8MTc2MDc5MDI3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sofa"
+    },
+    {
+      "id": "category-2",
+      "description": "Bedroom furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxiZWR8ZW58MHx8fHwxNzYwNzg4NjkyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bed"
+    },
+    {
+      "id": "category-3",
+      "description": "Dining room furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkaW5pbmclMjB0YWJsZXxlbnwwfHx8fDE3NjA3MzQ5Njd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dining table"
+    },
+    {
+      "id": "category-4",
+      "description": "Office furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1575318633968-0383e7d07ca0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxvZmZpY2UlMjBkZXNrfGVufDB8fHx8MTc2MDczNDk2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office desk"
+    },
+    {
+      "id": "category-5",
+      "description": "Outdoor furniture",
+      "imageUrl": "https://images.unsplash.com/photo-1688502173957-6d723f748df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwYXRpbyUyMGNoYWlyfGVufDB8fHx8MTc2MDc5MDI3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "patio chair"
+    },
+    {
+      "id": "category-new",
+      "description": "Newly added category",
+      "imageUrl": "https://images.unsplash.com/photo-1556888335-95371827d5fb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwbGFjZWhvbGRlcnxlbnwwfHx8fDE3NjA3OTAyNzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "placeholder"
+    },
+    {
+      "id": "product-1",
+      "description": "Minimalist Wooden Chair",
+      "imageUrl": "https://images.unsplash.com/photo-1650476524564-f94dc9669067?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3b29kZW4lMjBjaGFpcnxlbnwwfHx8fDE3NjA3MzM4NTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wooden chair"
+    },
+    {
+      "id": "product-2",
+      "description": "Modern Velvet Sofa",
+      "imageUrl": "https://images.unsplash.com/photo-1664404636987-5ce23d6d7ce8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx2ZWx2ZXQlMjBzb2ZhfGVufDB8fHx8MTc2MDc5MDI3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "velvet sofa"
+    },
+    {
+      "id": "product-3",
+      "description": "Sleek Metal Bookshelf",
+      "imageUrl": "https://images.unsplash.com/photo-1688293880928-b8e72e815cb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtZXRhbCUyMGJvb2tzaGVsZnxlbnwwfHx8fDE3NjA3OTAyNzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "metal bookshelf"
+    },
+    {
+      "id": "product-4",
+      "description": "Round Marble Coffee Table",
+      "imageUrl": "https://images.unsplash.com/photo-1558931450-5669a8529337?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtYXJibGUlMjB0YWJsZXxlbnwwfHx8fDE3NjA3OTAyNzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "marble table"
+    },
+    {
+      "id": "product-5",
+      "description": "Upholstered Queen Bed",
+      "imageUrl": "https://images.unsplash.com/photo-1740446568302-0eca27e820b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dXBob2xzdGVyZWQlMjBiZWR8ZW58MHx8fHwxNzYwNzkwMjc3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "upholstered bed"
+    },
+    {
+      "id": "product-6",
+      "description": "Ergonomic Office Chair",
+      "imageUrl": "https://images.unsplash.com/photo-1517502884422-41eaead166d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8b2ZmaWNlJTIwY2hhaXJ8ZW58MHx8fHwxNzYwNzMyMzk2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office chair"
+    },
+    {
+      "id": "product-7",
+      "description": "Industrial Floor Lamp",
+      "imageUrl": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxmbG9vciUyMGxhbXB8ZW58MHx8fHwxNzYwNzU5MjA2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "floor lamp"
+    },
+    {
+      "id": "product-8",
+      "description": "Expandable Dining Table",
+      "imageUrl": "https://images.unsplash.com/photo-1505409628601-edc9af17fda6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkaW5pbmclMjB0YWJsZXxlbnwwfHx8fDE3NjA3MzQ5Njd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dining table"
+    },
+    {
+      "id": "product-9",
+      "description": "Cozy Armchair",
+      "imageUrl": "https://images.unsplash.com/photo-1634148737510-727f137375e0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhcm1jaGFpcnxlbnwwfHx8fDE3NjA3Njk1MzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "armchair"
+    },
+    {
+      "id": "product-10",
+      "description": "Modern TV Stand",
+      "imageUrl": "https://images.unsplash.com/photo-1580897275296-87979517bd4c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxUViUyMHN0YW5kfGVufDB8fHx8MTc2MDc5MDI3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "TV stand"
+    },
+    {
+      "id": "product-11",
+      "description": "Floating Wall Shelves",
+      "imageUrl": "https://images.unsplash.com/photo-1545640904-e0027cad46ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3YWxsJTIwc2hlbHZlc3xlbnwwfHx8fDE3NjA3OTAyNzd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wall shelves"
+    },
+    {
+      "id": "product-12",
+      "description": "Patio Lounge Set",
+      "imageUrl": "https://images.unsplash.com/photo-1608255479801-a1c773cdce01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYXRpbyUyMHNldHxlbnwwfHx8fDE3NjA3NDkzNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "patio set"
+    }
+  ]
 }
