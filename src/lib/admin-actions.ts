@@ -89,6 +89,8 @@ export async function addProductAction(prevState: any, formData: FormData) {
         addProduct({
             ...validatedFields.data,
             // These are placeholders/defaults
+            longDescription: 'This is a default long description. Please edit it in the product management section.',
+            galleryImageUrls: [],
             isTopRated: false,
             isTopSale: false,
             isRecent: true,

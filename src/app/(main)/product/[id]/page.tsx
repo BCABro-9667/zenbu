@@ -11,6 +11,7 @@ import { BuyNowModal } from '@/components/main/buy-now-modal';
 import ProductCard from '@/components/main/product-card';
 import { ShoppingCart, Zap, Star } from 'lucide-react';
 import type { Product } from '@/lib/definitions';
+import { cn } from '@/lib/utils';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,25 +23,48 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  const [mainImage, setMainImage] = useState(product.imageUrl);
+
   const relatedProducts = getProducts().filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   return (
     <>
       <div className="container py-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <Card>
-            <CardContent className="p-0">
-              <div className="relative aspect-square w-full">
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  fill
-                  className="object-cover rounded-lg"
-                  data-ai-hint={product.imageHint}
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <div>
+            <Card>
+              <CardContent className="p-0">
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={mainImage}
+                    alt={product.name}
+                    fill
+                    className="object-cover rounded-lg"
+                    data-ai-hint={product.imageHint}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+            <div className="grid grid-cols-4 gap-2 mt-2">
+              {[product.imageUrl, ...product.galleryImageUrls].map((img, index) => (
+                <div 
+                  key={index}
+                  className={cn(
+                    "relative aspect-square rounded-md cursor-pointer border-2",
+                    mainImage === img ? "border-primary" : "border-transparent"
+                  )}
+                  onClick={() => setMainImage(img)}
+                >
+                  <Image
+                    src={img}
+                    alt={`${product.name} gallery image ${index + 1}`}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="space-y-6">
             <h1 className="text-4xl font-bold tracking-tight">{product.name}</h1>
             <div className="flex items-center gap-2">
@@ -75,8 +99,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
       </div>
       
+      <div className="py-16 bg-muted/20">
+        <div className="container">
+          <h2 className="text-3xl font-bold tracking-tight mb-6">Product Description</h2>
+          <div className="prose prose-lg max-w-none text-muted-foreground">
+            <p>{product.longDescription}</p>
+          </div>
+        </div>
+      </div>
+
       {relatedProducts.length > 0 && (
-        <div className="py-16 bg-muted/40">
+        <div className="py-16">
           <div className="container">
             <h2 className="text-3xl font-bold tracking-tight text-center mb-10">Related Products</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

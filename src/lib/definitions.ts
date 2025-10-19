@@ -2,8 +2,10 @@ export type Product = {
   id: string;
   name: string;
   description: string;
+  longDescription: string;
   price: number;
   imageUrl: string;
+  galleryImageUrls: string[];
   imageHint: string;
   category: string;
   isTopRated: boolean;

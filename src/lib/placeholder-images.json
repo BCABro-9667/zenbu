@@ -131,6 +131,222 @@
       "description": "Patio Lounge Set",
       "imageUrl": "https://images.unsplash.com/photo-1608255479801-a1c773cdce01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwYXRpbyUyMHNldHxlbnwwfHx8fDE3NjA3NDkzNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "patio set"
+    },
+    {
+      "id": "gallery-1-1",
+      "imageUrl": "https://images.unsplash.com/photo-1524107827937-d5b3b6a8f4b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFpciUyMHNpZGV8ZW58MHx8fHwxNzYwNzk0NTAxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Side view of minimalist wooden chair",
+      "imageHint": "chair side"
+    },
+    {
+      "id": "gallery-1-2",
+      "imageUrl": "https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3b29kJTIwdGV4dHVyZXxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of wooden chair texture",
+      "imageHint": "wood texture"
+    },
+    {
+      "id": "gallery-1-3",
+      "imageUrl": "https://images.unsplash.com/photo-1610749396754-d1a480e39ef9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFpciUyMHJvb218ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Minimalist wooden chair in a room setting",
+      "imageHint": "chair room"
+    },
+    {
+      "id": "gallery-2-1",
+      "imageUrl": "https://images.unsplash.com/photo-1693938379190-e10a17fcd489?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzb2ZhJTIwc2lkZXxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Side view of modern velvet sofa",
+      "imageHint": "sofa side"
+    },
+    {
+      "id": "gallery-2-2",
+      "imageUrl": "https://images.unsplash.com/photo-1591957974074-68daffbf8df8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2ZWx2ZXQlMjBmYWJyaWN8ZW58MHx8fHwxNzYwNzUzNDcxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of velvet sofa fabric",
+      "imageHint": "velvet fabric"
+    },
+    {
+      "id": "gallery-2-3",
+      "imageUrl": "https://images.unsplash.com/photo-1650300636679-b3310a41638d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzb2ZhJTIwbGl2aW5ncm9vbXxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Modern velvet sofa in a living room",
+      "imageHint": "sofa livingroom"
+    },
+    {
+      "id": "gallery-3-1",
+      "imageUrl": "https://images.unsplash.com/photo-1709959083213-d34aaa6e9f57?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxib29rc2hlbGYlMjBhbmdsZXxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Angled view of metal bookshelf",
+      "imageHint": "bookshelf angle"
+    },
+    {
+      "id": "gallery-3-2",
+      "imageUrl": "https://images.unsplash.com/photo-1567988122319-039d80fafc34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxib29rc2hlbGYlMjBzdHlsZWR8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Bookshelf with books and decor",
+      "imageHint": "bookshelf styled"
+    },
+    {
+      "id": "gallery-3-3",
+      "imageUrl": "https://images.unsplash.com/photo-1597355944805-bd28849bb4f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtZXRhbCUyMGZyYW1lfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of bookshelf metal frame",
+      "imageHint": "metal frame"
+    },
+    {
+      "id": "gallery-4-1",
+      "imageUrl": "https://images.unsplash.com/photo-1519219788971-8d9797e0928e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0YWJsZSUyMHRvcHxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Top view of marble coffee table",
+      "imageHint": "table top"
+    },
+    {
+      "id": "gallery-4-2",
+      "imageUrl": "https://images.unsplash.com/photo-1608501821300-4f99e58bba77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtYXJibGUlMjB0ZXh0dXJlfGVufDB8fHx8MTc2MDc0MDAxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of marble texture",
+      "imageHint": "marble texture"
+    },
+    {
+      "id": "gallery-4-3",
+      "imageUrl": "https://images.unsplash.com/photo-1684928364941-2158e071cdd6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx0YWJsZSUyMGxpdmluZ3Jvb218ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Marble coffee table in a living room",
+      "imageHint": "table livingroom"
+    },
+    {
+      "id": "gallery-5-1",
+      "imageUrl": "https://images.unsplash.com/photo-1599682802483-c31c10e577a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxiZWQlMjBoZWFkYm9hcmR8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Upholstered bed headboard detail",
+      "imageHint": "bed headboard"
+    },
+    {
+      "id": "gallery-5-2",
+      "imageUrl": "https://images.unsplash.com/photo-1715342835810-c013e0e08eb1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxiZWQlMjBzaWRlfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Side view of upholstered bed",
+      "imageHint": "bed side"
+    },
+    {
+      "id": "gallery-5-3",
+      "imageUrl": "https://images.unsplash.com/photo-1687816042075-3de2b5516f61?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxiZWQlMjBiZWRyb29tfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Upholstered bed in a bedroom",
+      "imageHint": "bed bedroom"
+    },
+    {
+      "id": "gallery-6-1",
+      "imageUrl": "https://images.unsplash.com/photo-1644845933242-cb40a29c9059?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaGFpciUyMGJhY2t8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Ergonomic office chair from the back",
+      "imageHint": "chair back"
+    },
+    {
+      "id": "gallery-6-2",
+      "imageUrl": "https://images.unsplash.com/photo-1672875827717-47f2afedb7d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaGFpciUyMGFybXJlc3R8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of chair armrest",
+      "imageHint": "chair armrest"
+    },
+    {
+      "id": "gallery-6-3",
+      "imageUrl": "https://images.unsplash.com/photo-1688578735427-994ecdea3ea4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjaGFpciUyMG9mZmljZXxlbnwwfHx8fDE3NjA3NTU3NzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Office chair in a workspace",
+      "imageHint": "chair office"
+    },
+    {
+      "id": "gallery-7-1",
+      "imageUrl": "https://images.unsplash.com/photo-1760019979531-86256eaf09e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxsYW1wJTIwb258ZW58MHx8fHwxNzYwNzg4NjkyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Floor lamp turned on",
+      "imageHint": "lamp on"
+    },
+    {
+      "id": "gallery-7-2",
+      "imageUrl": "https://images.unsplash.com/photo-1676410246091-829b7cb9bfc5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsYW1wJTIwaGVhZHxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of lamp head",
+      "imageHint": "lamp head"
+    },
+    {
+      "id": "gallery-7-3",
+      "imageUrl": "https://images.unsplash.com/photo-1713352533011-601ad0689860?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxsYW1wJTIwY29ybmVyfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Floor lamp in a room corner",
+      "imageHint": "lamp corner"
+    },
+    {
+      "id": "gallery-8-1",
+      "imageUrl": "https://images.unsplash.com/photo-1578625494482-d40f3018683f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx0YWJsZSUyMGV4dGVuZGVkfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Dining table fully extended",
+      "imageHint": "table extended"
+    },
+    {
+      "id": "gallery-8-2",
+      "imageUrl": "https://images.unsplash.com/photo-1677338003679-b422eb979c5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3b29kJTIwZ3JhaW58ZW58MHx8fHwxNzYwNzU5MjA2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of table wood grain",
+      "imageHint": "wood grain"
+    },
+    {
+      "id": "gallery-8-3",
+      "imageUrl": "https://images.unsplash.com/photo-1625225683189-f23e52101360?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0YWJsZSUyMHNldHxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Dining table set for dinner",
+      "imageHint": "table set"
+    },
+    {
+      "id": "gallery-9-1",
+      "imageUrl": "https://images.unsplash.com/photo-1576909023157-8cfea9e53818?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhcm1jaGFpciUyMHNpZGV8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Side view of cozy armchair",
+      "imageHint": "armchair side"
+    },
+    {
+      "id": "gallery-9-2",
+      "imageUrl": "https://images.unsplash.com/photo-1615799998603-7c6270a45196?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmYWJyaWMlMjB0ZXh0dXJlfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Armchair fabric close-up",
+      "imageHint": "fabric texture"
+    },
+    {
+      "id": "gallery-9-3",
+      "imageUrl": "https://images.unsplash.com/photo-1705155843858-4d7ddb7e9dfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxhcm1jaGFpciUyMGJsYW5rZXR8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Cozy armchair with a blanket",
+      "imageHint": "armchair blanket"
+    },
+    {
+      "id": "gallery-10-1",
+      "imageUrl": "https://images.unsplash.com/photo-1570806775184-7705e67bc464?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdGFuZCUyMHN0b3JhZ2V8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "TV stand with storage open",
+      "imageHint": "stand storage"
+    },
+    {
+      "id": "gallery-10-2",
+      "imageUrl": "https://images.unsplash.com/photo-1644075364816-35befed6ff35?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxzdGFuZCUyMHN1cmZhY2V8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of TV stand surface",
+      "imageHint": "stand surface"
+    },
+    {
+      "id": "gallery-10-3",
+      "imageUrl": "https://images.unsplash.com/photo-1641247494306-7e62b0333ac0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzdGFuZCUyMHNldHVwfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "TV stand in an entertainment setup",
+      "imageHint": "stand setup"
+    },
+    {
+      "id": "gallery-11-1",
+      "imageUrl": "https://images.unsplash.com/photo-1729350793884-09e69ea2f2a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzaGVsdmVzJTIwYW5nbGV8ZW58MHx8fHwxNzYwODQzNzIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Floating shelves from an angle",
+      "imageHint": "shelves angle"
+    },
+    {
+      "id": "gallery-11-2",
+      "imageUrl": "https://images.unsplash.com/photo-1741242950678-e8bb3f6107ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2hlbHZlcyUyMGRlY29yYXRlZHxlbnwwfHx8fDE3NjA4NDM3MjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Wall shelves with decorative items",
+      "imageHint": "shelves decorated"
+    },
+    {
+      "id": "gallery-11-3",
+      "imageUrl": "https://images.unsplash.com/photo-1732851595901-f63a06e869c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzaGVsZiUyMGNsb3NlfGVufDB8fHx8MTc2MDg0MzcyMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Single floating shelf close-up",
+      "imageHint": "shelf close"
+    },
+    {
+      "id": "gallery-12-1",
+      "imageUrl": "https://images.unsplash.com/photo-1656646549608-d520fa569f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwYXRpbyUyMGRlY2t8ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Patio lounge set on a deck",
+      "imageHint": "patio deck"
+    },
+    {
+      "id": "gallery-12-2",
+      "imageUrl": "https://images.unsplash.com/photo-1750271328083-4ba7abebf4bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwYXRpbyUyMGN1c2hpb258ZW58MHx8fHwxNzYwODQzNzIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Close-up of patio chair cushion",
+      "imageHint": "patio cushion"
+    },
+    {
+      "id": "gallery-12-3",
+      "imageUrl": "https://images.unsplash.com/photo-1674405640040-b93c1598dad4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwYXRpbyUyMGFycmFuZ2VtZW50fGVufDB8fHx8MTc2MDg0MzcyM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "description": "Full patio lounge set arrangement",
+      "imageHint": "patio arrangement"
     }
   ]
 }
