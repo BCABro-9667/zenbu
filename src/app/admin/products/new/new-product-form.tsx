@@ -116,7 +116,7 @@ export default function NewProductForm({ categories }: { categories: Category[] 
                     </CardHeader>
                      <CardContent className="grid sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="price">Price</Label>
+                            <Label htmlFor="price">Price (in ₹)</Label>
                             <Input id="price" type="number" placeholder="0.00" step="0.01" {...register('price')} />
                             {errors.price && <p className="text-sm font-medium text-destructive">{errors.price.message}</p>}
                         </div>

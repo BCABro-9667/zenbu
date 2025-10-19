@@ -32,7 +32,7 @@ export default function CartPage() {
                 </div>
                 <div className="ml-4 flex-1">
                   <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                  <p className="text-sm text-muted-foreground">₹{item.price.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
@@ -44,7 +44,7 @@ export default function CartPage() {
                   </Button>
                 </div>
                 <div className="ml-4 font-semibold w-20 text-right">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  ₹{(item.price * item.quantity).toFixed(2)}
                 </div>
                 <Button variant="ghost" size="icon" className="ml-2 text-muted-foreground hover:text-destructive" onClick={() => removeFromCart(item.id)}>
                   <Trash2 className="h-4 w-4" />
@@ -60,7 +60,7 @@ export default function CartPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span>Subtotal ({cartCount} items)</span>
-                  <span>${cartTotal.toFixed(2)}</span>
+                  <span>₹{cartTotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
@@ -68,7 +68,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span>${cartTotal.toFixed(2)}</span>
+                  <span>₹{cartTotal.toFixed(2)}</span>
                 </div>
               </CardContent>
               <CardFooter>

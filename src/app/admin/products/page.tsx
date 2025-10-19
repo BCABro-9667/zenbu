@@ -116,7 +116,7 @@ export default function ProductsPage() {
                             <TableCell>
                                 <Badge variant="outline">{product.category}</Badge>
                             </TableCell>
-                            <TableCell className="hidden md:table-cell">${product.price.toFixed(2)}</TableCell>
+                            <TableCell className="hidden md:table-cell">₹{product.price.toFixed(2)}</TableCell>
                             <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
                             <TableCell>
                                 <DropdownMenu>

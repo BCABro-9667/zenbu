@@ -80,7 +80,7 @@ export function BuyNowModal({ product, isOpen, onClose }: BuyNowModalProps) {
                 </div>
                 <div>
                     <h3 className="font-semibold">{product.name}</h3>
-                    <p className="text-sm text-muted-foreground">Price: ${product.price.toFixed(2)}</p>
+                    <p className="text-sm text-muted-foreground">Price: ₹{product.price.toFixed(2)}</p>
                     <div className="flex items-center gap-2 mt-2">
                         <Button type="button" variant="outline" size="icon" className="h-6 w-6" onClick={() => handleQuantityChange(-1)}><Minus className="h-4 w-4" /></Button>
                         <span>{quantity}</span>
@@ -112,7 +112,7 @@ export function BuyNowModal({ product, isOpen, onClose }: BuyNowModalProps) {
         </div>
         <DialogFooter>
           <Button type="submit" className="w-full">
-            Place Order (${(product.price * quantity).toFixed(2)})
+            Place Order (₹{(product.price * quantity).toFixed(2)})
           </Button>
         </DialogFooter>
         </form>
