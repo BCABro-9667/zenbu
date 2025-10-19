@@ -26,27 +26,15 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [mainImage, setMainImage] = useState(product.imageUrl);
 
   const relatedProducts = getProducts().filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const galleryImages = [product.imageUrl, ...product.galleryImageUrls];
 
   return (
     <>
       <div className="container py-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div>
-            <Card>
-              <CardContent className="p-4">
-                <div className="relative aspect-square w-full max-w-md mx-auto">
-                  <Image
-                    src={mainImage}
-                    alt={product.name}
-                    fill
-                    className="object-cover rounded-lg"
-                    data-ai-hint={product.imageHint}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-            <div className="grid grid-cols-4 gap-2 mt-2 max-w-md mx-auto">
-              {[product.imageUrl, ...product.galleryImageUrls].map((img, index) => (
+          <div className="grid grid-cols-5 gap-4">
+            <div className="col-span-1 flex flex-col gap-2">
+              {galleryImages.map((img, index) => (
                 <div 
                   key={index}
                   className={cn(
@@ -63,6 +51,21 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   />
                 </div>
               ))}
+            </div>
+            <div className="col-span-4">
+                <Card>
+                <CardContent className="p-4">
+                    <div className="relative aspect-square w-full">
+                    <Image
+                        src={mainImage}
+                        alt={product.name}
+                        fill
+                        className="object-cover rounded-lg"
+                        data-ai-hint={product.imageHint}
+                    />
+                    </div>
+                </CardContent>
+                </Card>
             </div>
           </div>
           <div className="space-y-6">
