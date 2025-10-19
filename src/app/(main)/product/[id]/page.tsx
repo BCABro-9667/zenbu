@@ -33,8 +33,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
             <Card>
-              <CardContent className="p-0">
-                <div className="relative aspect-square w-full">
+              <CardContent className="p-4">
+                <div className="relative aspect-square w-full max-w-md mx-auto">
                   <Image
                     src={mainImage}
                     alt={product.name}
@@ -45,7 +45,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 </div>
               </CardContent>
             </Card>
-            <div className="grid grid-cols-4 gap-2 mt-2">
+            <div className="grid grid-cols-4 gap-2 mt-2 max-w-md mx-auto">
               {[product.imageUrl, ...product.galleryImageUrls].map((img, index) => (
                 <div 
                   key={index}
