@@ -1,3 +1,4 @@
+
 import ProductCard from '@/components/main/product-card';
 import { getCategoryBySlug, getProductsByCategory } from '@/lib/data';
 import { notFound } from 'next/navigation';
