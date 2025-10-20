@@ -26,6 +26,7 @@ export default function HeroSlider() {
               stopOnInteraction: true,
             }),
         ]}
+        className="overflow-hidden rounded-[24px]"
       >
         <CarouselContent>
           {heroImages.map((image, index) => (
