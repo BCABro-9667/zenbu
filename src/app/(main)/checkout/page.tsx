@@ -5,9 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useFormState } from 'react-dom';
+import { useActionState, useEffect } from 'react';
 import { placeOrder } from '@/lib/actions';
-import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -19,7 +18,7 @@ export default function CheckoutPage() {
 
   const initialState = { message: null, errors: {} };
   const placeOrderWithItems = placeOrder.bind(null, cartItems, cartTotal);
-  const [state, dispatch] = useFormState(placeOrderWithItems, initialState);
+  const [state, dispatch] = useActionState(placeOrderWithItems, initialState);
 
   useEffect(() => {
     if (state.message === 'success') {

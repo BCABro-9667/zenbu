@@ -9,14 +9,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { getCategories } from "@/lib/data";
 import { Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction } from "@/lib/admin-actions";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
 function AddCategoryForm() {
-    const [state, formAction] = useFormState(addCategoryAction, { message: null });
+    const [state, formAction] = useActionState(addCategoryAction, { message: null });
     const { pending } = useFormStatus();
     const { toast } = useToast();
     const formRef = useRef<HTMLFormElement>(null);
@@ -48,7 +48,7 @@ export default function CategoriesPage() {
     const { toast } = useToast();
     
     const [suggestions, setSuggestions] = useState<string[]>([]);
-    const [suggestionState, suggestionAction] = useFormState(suggestCategoriesAction, { message: null, suggestions: [] });
+    const [suggestionState, suggestionAction] = useActionState(suggestCategoriesAction, { message: null, suggestions: [] });
     const { pending: suggestionsPending } = useFormStatus();
     const suggestionFormRef = useRef<HTMLFormElement>(null);
 

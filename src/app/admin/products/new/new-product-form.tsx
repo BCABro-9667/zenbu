@@ -3,8 +3,8 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useFormStatus } from 'react-dom';
+import { useActionState, useEffect, useRef, useState, useTransition } from 'react';
 
 import { addProductAction, generateDescriptionAction } from '@/lib/admin-actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,12 +33,12 @@ export default function NewProductForm({ categories }: { categories: Category[] 
     const { toast } = useToast();
     const [isGenerating, startDescriptionGeneration] = useTransition();
 
-    const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<ProductFormData>({
+    const { register, handleSubmit, formState: { errors }, setValue, watch, control } = useForm<ProductFormData>({
         resolver: zodResolver(productSchema),
         defaultValues: { imageUrl: 'https://picsum.photos/seed/newprod/400/400' }
     });
 
-    const [formState, formAction] = useFormState(addProductAction, { message: null, errors: {} });
+    const [formState, formAction] = useActionState(addProductAction, { message: null, errors: {} });
 
     const productTitle = watch('name');
     const keywords = watch('keywords');
@@ -138,7 +138,7 @@ export default function NewProductForm({ categories }: { categories: Category[] 
                             <Label>Product Category</Label>
                             <Controller
                                 name="category"
-                                control={register.control}
+                                control={control}
                                 render={({ field }) => (
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <SelectTrigger>

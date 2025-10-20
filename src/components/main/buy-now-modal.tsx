@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,6 @@ import { useToast } from '@/hooks/use-toast';
 import type { Product } from '@/lib/definitions';
 import Image from 'next/image';
 import { Minus, Plus } from 'lucide-react';
-import { useFormState } from 'react-dom';
 import { placeOrder } from '@/lib/actions';
 import type { CartItem } from '@/lib/definitions';
 
@@ -36,7 +35,7 @@ export function BuyNowModal({ product, isOpen, onClose }: BuyNowModalProps) {
   
   const cartItem: CartItem = { ...product, quantity };
   const placeOrderWithItems = placeOrder.bind(null, [cartItem], product.price * quantity);
-  const [state, dispatch] = useFormState(placeOrderWithItems, initialState);
+  const [state, dispatch] = useActionState(placeOrderWithItems, initialState);
 
 
   const handleQuantityChange = (amount: number) => {
