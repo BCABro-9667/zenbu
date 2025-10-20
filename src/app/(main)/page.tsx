@@ -13,7 +13,9 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12 md:space-y-20 pb-20">
-      <HeroSlider />
+      <div className="mt-2.5">
+        <HeroSlider />
+      </div>
       <CategoryCircles />
       <ProductSection title="Top Rated Products" products={topRatedProducts} />
       <ProductSection title="Top Selling Products" products={topSaleProducts} />
