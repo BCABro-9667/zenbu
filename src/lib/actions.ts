@@ -1,3 +1,4 @@
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -5,14 +6,14 @@ import { z } from 'zod';
 import { addOrder } from './data';
 import type { CartItem } from './definitions';
 
-const FormSchema = z.object({
+const OrderFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Please enter a valid email.' }),
   phone: z.string().min(10, { message: 'Please enter a valid phone number.' }),
   address: z.string().min(5, { message: 'Please enter a valid address.' }),
 });
 
-export type State = {
+export type OrderState = {
   errors?: {
     name?: string[];
     email?: string[];
@@ -25,10 +26,10 @@ export type State = {
 export async function placeOrder(
   cartItems: CartItem[], 
   total: number, 
-  prevState: State, 
+  prevState: OrderState, 
   formData: FormData
 ) {
-  const validatedFields = FormSchema.safeParse({
+  const validatedFields = OrderFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     phone: formData.get('phone'),
@@ -63,5 +64,45 @@ export async function placeOrder(
   }
   
   revalidatePath('/admin/orders');
+  return { message: 'success' };
+}
+
+
+const ContactFormSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  phone: z.string().min(10, { message: "Please enter a valid phone number." }),
+  email: z.string().email({ message: "Please enter a valid email." }).optional().or(z.literal('')),
+  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+});
+
+export type ContactState = {
+  errors?: {
+    name?: string[];
+    phone?: string[];
+    email?: string[];
+    message?: string[];
+  };
+  message?: string | null;
+}
+
+export async function submitContactForm(prevState: ContactState | null, formData: FormData): Promise<ContactState> {
+  const validatedFields = ContactFormSchema.safeParse({
+    name: formData.get('name'),
+    phone: formData.get('phone'),
+    email: formData.get('email'),
+    message: formData.get('message'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Validation failed. Please check your input."
+    }
+  }
+
+  // Here you would typically send an email or save to a database.
+  // For this example, we'll just log it to the console.
+  console.log("New contact form submission:", validatedFields.data);
+
   return { message: 'success' };
 }

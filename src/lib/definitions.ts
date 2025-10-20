@@ -1,3 +1,4 @@
+
 export type Product = {
   id: string;
   name: string;
@@ -14,6 +15,7 @@ export type Product = {
   stock: number;
   videoUrl?: string;
   brochureUrl?: string;
+  specifications?: Record<string, string>;
 };
 
 export type Category = {
