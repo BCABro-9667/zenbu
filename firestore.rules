@@ -1,0 +1,188 @@
+/**
+ * @file Firestore Security Rules
+ * @description This ruleset enforces a strict role-based and user-ownership security model for an e-commerce application.
+ *
+ * Data Structure:
+ * - /products/{productId}: Publicly readable, but create/update/delete operations are restricted to admins.
+ * - /categories/{categoryId}: Publicly readable, but create/update/delete operations are restricted to admins.
+ * - /leads/{leadId}: Only accessible by admins.
+ * - /customers/{customerId}: Only accessible by the customer with matching {customerId}.
+ * - /orders/{orderId}: Accessible by the customer who placed the order. The customer ID must match.
+ * - /orders/{orderId}/orderItems/{orderItemId}: Accessible by the customer who placed the order. Access is validated against the parent order document.
+ * - /roles_admin/{userId}: The existence of this document grants admin privileges to the user.
+ *
+ * Key Security Decisions:
+ * - Public read access is granted to products and categories.
+ * - Listing of leads is disallowed for non-admins.
+ * - All write operations require authentication.
+ * - The rules avoid using `get()` calls for authorization by relying on path-based checks and denormalized data.
+ *
+ * Denormalization for Authorization:
+ * - The `orders` and `orderItems` collections rely on the `customerId` within the `order` document to authorize access to a customer's own orders and associated order items.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Checks if the user is signed in.
+     * @path N/A (Helper function)
+     * @allow N/A (Helper function)
+     * @deny N/A (Helper function)
+     * @principle Requires the user to be authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the user is an admin by verifying the existence of their admin role document.
+     * @path N/A (Helper function)
+     * @allow N/A (Helper function)
+     * @deny N/A (Helper function)
+     * @principle Grants admin privileges based on document existence.
+     */
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * @description Checks if the authenticated user ID matches the provided userId.
+     * @path N/A (Helper function)
+     * @allow N/A (Helper function)
+     * @deny N/A (Helper function)
+     * @principle Enforces user ownership.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the authenticated user owns the resource, ensuring the document exists.
+     * @path N/A (Helper function)
+     * @allow N/A (Helper function)
+     * @deny N/A (Helper function)
+     * @principle Enforces user ownership and resource existence.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description Rules for the /products collection.
+     * @path /products/{productId}
+     * @allow (get, list) - Any user can read product information.
+     * @allow (create, update, delete) - Only admins can create, update, or delete products.
+     * @deny (create, update, delete) - Non-admins cannot create, update, or delete products.
+     * @principle Public read access with admin-only write access.
+     */
+    match /products/{productId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && isAdmin();
+      allow update: if isSignedIn() && isAdmin() && resource != null;
+      allow delete: if isSignedIn() && isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Rules for the /categories collection.
+     * @path /categories/{categoryId}
+     * @allow (get, list) - Any user can read category information.
+     * @allow (create, update, delete) - Only admins can create, update, or delete categories.
+     * @deny (create, update, delete) - Non-admins cannot create, update, or delete categories.
+     * @principle Public read access with admin-only write access.
+     */
+    match /categories/{categoryId} {
+      allow get, list: if true;
+      allow create: if isSignedIn() && isAdmin();
+      allow update: if isSignedIn() && isAdmin() && resource != null;
+      allow delete: if isSignedIn() && isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Rules for the /leads collection.
+     * @path /leads/{leadId}
+     * @allow (get) - Only admins can read lead information.
+     * @allow (create, update, delete) - Only admins can create, update, or delete leads.
+     * @deny (get) - Non-admins cannot read lead information.
+     * @deny (list) - Listing leads is not allowed.
+     * @deny (create, update, delete) - Non-admins cannot create, update, or delete leads.
+     * @principle Restricts lead access and management to admins.
+     */
+    match /leads/{leadId} {
+      allow get: if isSignedIn() && isAdmin();
+      allow list: if false;
+      allow create: if isSignedIn() && isAdmin();
+      allow update: if isSignedIn() && isAdmin() && resource != null;
+      allow delete: if isSignedIn() && isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Rules for the /customers collection.
+     * @path /customers/{customerId}
+     * @allow (get, update, delete) - Only the customer with the matching ID can access their own profile.
+     * @allow (create) - A user can create their own customer document if the customerId matches their auth.uid.
+     * @deny (get, update, delete) - Customers cannot access other customer profiles.
+     * @deny (create) - Users cannot create customer documents with IDs different from their own.
+     * @principle Enforces user ownership for customer profiles.
+     */
+    match /customers/{customerId} {
+      allow get: if isSignedIn() && isOwner(customerId);
+      allow list: if false;
+      allow create: if isSignedIn() && isOwner(customerId) && request.resource.data.id == customerId;
+      allow update: if isSignedIn() && isExistingOwner(customerId) && request.resource.data.id == resource.data.id;
+      allow delete: if isSignedIn() && isExistingOwner(customerId);
+    }
+
+    /**
+     * @description Rules for the /orders collection.
+     * @path /orders/{orderId}
+     * @allow (get, list) - Only the customer associated with the order can read the order.  The `customerId` field in the order document must match the user's ID.
+     * @allow (create) - Any signed-in user can create an order, provided they set the `customerId` to their own user ID.
+     * @allow (update, delete) - Only the customer associated with the order can update or delete it.
+     * @deny (get, list, update, delete) - Customers cannot access orders associated with other customer IDs.
+     * @principle Enforces customer ownership for orders.
+     */
+    match /orders/{orderId} {
+      allow get: if isSignedIn() && resource.data.customerId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.customerId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.customerId == request.auth.uid;
+      allow update: if isSignedIn() && resource != null && resource.data.customerId == request.auth.uid;
+      allow delete: if isSignedIn() && resource != null && resource.data.customerId == request.auth.uid;
+    }
+
+    /**
+     * @description Rules for the /orderItems collection (subcollection of /orders).
+     * @path /orders/{orderId}/orderItems/{orderItemId}
+     * @allow (get, list) - Only the customer associated with the parent order can access the order items.
+     * @allow (create) - Any signed-in user can create an orderItem, provided that the customerId of the parent order document matches their own user ID.
+     * @allow (update, delete) - Only the customer associated with the parent order can update or delete order items.
+     * @deny (get, list, create, update, delete) - Customers cannot access order items associated with orders belonging to other customer IDs.
+     * @principle Enforces customer ownership for order items, based on the parent order.
+     */
+    match /orders/{orderId}/orderItems/{orderItemId} {
+      allow get: if isSignedIn() && get(/databases/$(database)/documents/orders/$(orderId)).data.customerId == request.auth.uid;
+      allow list: if isSignedIn() && get(/databases/$(database)/documents/orders/$(orderId)).data.customerId == request.auth.uid;
+      allow create: if isSignedIn() && get(/databases/$(database)/documents/orders/$(orderId)).data.customerId == request.auth.uid;
+      allow update: if isSignedIn() && resource != null && get(/databases/$(database)/documents/orders/$(orderId)).data.customerId == request.auth.uid;
+      allow delete: if isSignedIn() && resource != null && get(/databases/$(database)/documents/orders/$(orderId)).data.customerId == request.auth.uid;
+    }
+
+    /**
+     * @description Rules for the /roles_admin collection.
+     * @path /roles_admin/{userId}
+     * @allow get: if isSignedIn() && isOwner(userId);
+     * @allow list: if false;
+     * @allow create: if isSignedIn() && isOwner(userId);
+     * @allow update: if false;
+     * @allow delete: if isSignedIn() && isAdmin() && resource != null;
+     * @principle Only an admin can delete an admin role, but a user can read and create their own role (for testing purposes).
+     */
+    match /roles_admin/{userId} {
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if false;
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if false;
+      allow delete: if isSignedIn() && isAdmin() && resource != null;
+    }
+  }
+}

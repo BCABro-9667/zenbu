@@ -1,0 +1,372 @@
+{
+  "entities": {
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a product in the e-commerce system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the product image.",
+          "format": "uri"
+        },
+        "categoryId": {
+          "type": "string",
+          "description": "Reference to Category. (Relationship: Category 1:N Product)"
+        },
+        "salePrice": {
+          "type": "number",
+          "description": "Sale price of the product, if applicable."
+        },
+        "isTopRated": {
+          "type": "boolean",
+          "description": "Indicates if the product is top-rated."
+        },
+        "isTopSale": {
+          "type": "boolean",
+          "description": "Indicates if the product is a top sale."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "price",
+        "imageUrl",
+        "categoryId"
+      ]
+    },
+    "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Category",
+      "type": "object",
+      "description": "Represents a category of products.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the category."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the category."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the category."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the category image.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "imageUrl"
+      ]
+    },
+    "Lead": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Lead",
+      "type": "object",
+      "description": "Represents a lead captured from the website (e.g., contact form submission).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the lead."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the lead."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the lead.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the lead."
+        },
+        "message": {
+          "type": "string",
+          "description": "Message from the lead."
+        },
+        "dateCreated": {
+          "type": "string",
+          "description": "Date and time the lead was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "message",
+        "dateCreated"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents an order placed by a customer.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to Customer. (Relationship: Customer 1:N Order)"
+        },
+        "orderDate": {
+          "type": "string",
+          "description": "Date the order was placed.",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total amount of the order."
+        },
+        "shippingAddress": {
+          "type": "string",
+          "description": "Shipping address for the order."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the order (e.g., pending, processing, shipped, delivered)."
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "orderDate",
+        "totalAmount",
+        "shippingAddress",
+        "status"
+      ]
+    },
+    "OrderItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderItem",
+      "type": "object",
+      "description": "Represents an item within an order.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the order item."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Reference to Order. (Relationship: Order 1:N OrderItem)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product. (Relationship: Product 1:N OrderItem)"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantity of the product in the order item."
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product at the time of the order."
+        }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "productId",
+        "quantity",
+        "price"
+      ]
+    },
+    "Customer": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Customer",
+      "type": "object",
+      "description": "Represents a customer in the e-commerce system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the customer."
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the customer."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the customer."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the customer.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the customer."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the customer."
+        }
+      },
+      "required": [
+        "id",
+        "firstName",
+        "lastName",
+        "email",
+        "address"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product information. Requires admin role for create, update, and delete operations.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier for the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/categories/{categoryId}",
+        "definition": {
+          "entityName": "Category",
+          "schema": {
+            "$ref": "#/backend/entities/Category"
+          },
+          "description": "Stores category information. Requires admin role for create, update, and delete operations.",
+          "params": [
+            {
+              "name": "categoryId",
+              "description": "The unique identifier for the category."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/leads/{leadId}",
+        "definition": {
+          "entityName": "Lead",
+          "schema": {
+            "$ref": "#/backend/entities/Lead"
+          },
+          "description": "Stores lead information submitted through the website. Requires admin role for read, create, update, and delete operations.",
+          "params": [
+            {
+              "name": "leadId",
+              "description": "The unique identifier for the lead."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/customers/{customerId}",
+        "definition": {
+          "entityName": "Customer",
+          "schema": {
+            "$ref": "#/backend/entities/Customer"
+          },
+          "description": "Stores customer profile information. Customers can only read/write their own profile data.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique identifier for the customer, matching the user ID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores order information. Customers can only read/write orders associated with their customer ID.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/orders/{orderId}/orderItems/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores order item information for a specific order. Customers can only read/write order items associated with their orders.",
+          "params": [
+            {
+              "name": "orderId",
+              "description": "The unique identifier for the order."
+            },
+            {
+              "name": "orderItemId",
+              "description": "The unique identifier for the order item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{userId}",
+        "definition": {
+          "entityName": "adminRole",
+          "schema": {
+            "$ref": "#/backend/entities/Customer"
+          },
+          "description": "Used to check if a user has admin role. The existence of the document grants admin privileges.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to support an e-commerce application with features like product catalogs, categories, lead capture, and order management.  The structure emphasizes Authorization Independence by avoiding `get()` calls in security rules, leveraging denormalization where necessary. Structural Segregation is applied by keeping data with differing access needs in separate collections. Access Modeling follows consistent patterns, primarily path-based ownership and the membership map approach for collaborative data where applicable.  This design ensures clarity, predictability, and simplifies security rule implementation.\n\nSpecifically:\n\n*   **Products and Categories:** Stored in top-level collections (`/products`, `/categories`) for easy access and management. The `categoryId` in the `Product` entity establishes the relationship between products and categories, enabling efficient querying of products within a specific category.\n*   **Leads:** Stored in the `/leads` collection.  Given that leads are typically managed by admins, a dedicated collection simplifies security rules.\n*   **Orders and OrderItems:** Orders are stored under `/orders` and OrderItems are nested under orders as a subcollection (`/orders/{orderId}/orderItems`).  This reflects the hierarchical relationship.  Since orders are owned by customers, the customer ID is included in the order document.\n*   **Customers:** Customer data is stored in the `/customers/{customerId}` collection, enabling path-based access control.\n\nAuthorization Independence is achieved as follows:\n\n*   **No `get()` calls:**  The structure avoids the need for `get()` calls in security rules by denormalizing authorization data when needed.  For example, if access to `orderItems` depended on the `customerID` in the `order` document, we would denormalize the `customerID` to the `orderItems` documents.\n\nQAPs are supported as follows:\n\n*   **Secure List Operations:** Each top-level collection has a homogeneous security posture.  For example, only admins can `list` the `/leads` collection.  Users can only `list` orders associated with their customer ID in `/customers/{customerId}/orders`.\n*   **Role-Based Access Control:**  Admins are managed via the `/roles_admin/{uid}` document existence. This ensures that only authorized users can perform administrative tasks.\n\nThis structure prioritizes security, scalability, and debuggability by adhering to the core design principles and strategy mandates."
+  }
+}
