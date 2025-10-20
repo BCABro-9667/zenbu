@@ -57,6 +57,10 @@ export const getCategoryBySlug = (slug: string): Category | undefined => {
     const category = categories.find(c => c.slug === slug);
     return category ? { ...category, imageUrl: findImage(category.imageUrl).imageUrl, imageHint: findImage(category.imageUrl).imageHint } : undefined;
 }
+export const getCategoryByName = (name: string): Category | undefined => {
+    const category = categories.find(c => c.name === name);
+    return category ? { ...category, imageUrl: findImage(category.imageUrl).imageUrl, imageHint: findImage(category.imageUrl).imageHint } : undefined;
+}
 export const getHeroSliderImages = (): ImagePlaceholder[] => {
     return PlaceHolderImages.filter(img => img.id.startsWith('hero-'));
 }

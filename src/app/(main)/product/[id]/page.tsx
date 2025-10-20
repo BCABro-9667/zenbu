@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { getProductById, getProducts } from '@/lib/data';
+import { getProductById, getProducts, getCategoryByName } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/context/cart-context';
@@ -13,6 +13,7 @@ import { ShoppingCart, Zap, Star, Video, FileText } from 'lucide-react';
 import type { Product } from '@/lib/definitions';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { Breadcrumb } from '@/components/main/breadcrumb';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +25,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     notFound();
   }
 
+  const category = getCategoryByName(product.category);
+
+  const breadcrumbItems = [
+    { label: 'Home', href: '/' },
+    ...(category ? [{ label: category.name, href: `/category/${category.slug}` }] : []),
+    { label: product.name },
+  ];
+
   const [mainImage, setMainImage] = useState(product.imageUrl);
 
   const relatedProducts = getProducts().filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
@@ -31,7 +40,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <div className="container py-12">
+      <div className="container py-8">
+        <Breadcrumb items={breadcrumbItems} className="mb-6" />
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="grid grid-cols-5 gap-4">
             <div className="col-span-1 flex flex-col gap-2">
