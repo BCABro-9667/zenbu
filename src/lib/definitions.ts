@@ -31,6 +31,8 @@ export type CartItem = {
   quantity: number;
 };
 
+export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
+
 export type Order = {
   id: string;
   items: CartItem[];
@@ -42,5 +44,5 @@ export type Order = {
   };
   total: number;
   createdAt: string;
-  status: 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
+  status: OrderStatus;
 };

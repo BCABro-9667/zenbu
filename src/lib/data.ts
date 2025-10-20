@@ -64,6 +64,10 @@ export const getBannerImage = (): ImagePlaceholder => findImage('banner-1');
 
 // Admin/Orders API
 export const getOrders = (): Order[] => orders;
+export const getOrderById = (orderId: string): Order | undefined => {
+    return orders.find(o => o.id === orderId);
+}
+
 export const addOrder = (order: Omit<Order, 'id' | 'createdAt' | 'status'>): Order => {
     const newOrder: Order = {
         id: `order-${Date.now()}`,

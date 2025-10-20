@@ -2,10 +2,11 @@
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
 import { suggestCategories } from '@/ai/flows/category-suggestion-generator';
-import { addProduct, addCategory, deleteCategory, deleteProduct, updateCategory } from '@/lib/data';
+import { addProduct, addCategory, deleteCategory, deleteProduct, updateCategory, updateOrderStatus } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
+import type { Order } from './definitions';
 
 // AI Actions
 export async function generateDescriptionAction(prevState: any, formData: FormData) {
@@ -163,5 +164,16 @@ export async function deleteCategoryAction(id: string) {
         revalidatePath('/admin/categories');
     } catch (e) {
         return { message: 'Database error: Failed to delete category.' };
+    }
+}
+
+export async function updateOrderStatusAction(orderId: string, status: Order['status']) {
+    try {
+        updateOrderStatus(orderId, status);
+        revalidatePath('/admin/orders');
+        revalidatePath(`/admin/orders/${orderId}`);
+        return { message: 'success' };
+    } catch (e) {
+        return { message: 'Database error: Failed to update order status.' };
     }
 }

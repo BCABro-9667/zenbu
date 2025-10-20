@@ -1,9 +1,12 @@
 import { PageHeader } from "@/components/admin/page-header";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getOrders } from "@/lib/data";
 import { format } from "date-fns";
+import { Eye } from "lucide-react";
+import Link from "next/link";
 
 export default function OrdersPage() {
     const orders = getOrders();
@@ -38,6 +41,7 @@ export default function OrdersPage() {
                                 <TableHead className="hidden sm:table-cell">Status</TableHead>
                                 <TableHead className="hidden md:table-cell">Date</TableHead>
                                 <TableHead className="text-right">Amount</TableHead>
+                                <TableHead><span className="sr-only">Actions</span></TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -58,10 +62,18 @@ export default function OrdersPage() {
                                         {format(new Date(order.createdAt), "PPP")}
                                     </TableCell>
                                     <TableCell className="text-right">₹{order.total.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button asChild variant="outline" size="icon">
+                                            <Link href={`/admin/orders/${order.id}`}>
+                                                <Eye className="h-4 w-4" />
+                                                <span className="sr-only">View Order</span>
+                                            </Link>
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             )) : (
                                 <TableRow>
-                                    <TableCell colSpan={4} className="text-center h-24">
+                                    <TableCell colSpan={5} className="text-center h-24">
                                         No orders found.
                                     </TableCell>
                                 </TableRow>
