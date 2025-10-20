@@ -21,21 +21,21 @@ export default function ContactPage() {
               <MapPin className="h-7 w-7 text-primary mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-semibold text-lg">Our Office</h3>
-                <p className="text-muted-foreground">123 Furniture Lane, Decor City, 11001</p>
+                <p className="text-muted-foreground">Plot No. 89, Sector-59, HSIIDC Industrial Estate, Faridabad, Haryana - 121 004</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <Phone className="h-7 w-7 text-primary mt-1 flex-shrink-0" />
                <div>
                 <h3 className="font-semibold text-lg">Phone Support</h3>
-                <p className="text-muted-foreground">1800 266 6123, 020 68197600</p>
+                <p className="text-muted-foreground">9810038219</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <Mail className="h-7 w-7 text-primary mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-semibold text-lg">Email Support</h3>
-                <p className="text-muted-foreground">support@zenbu.com</p>
+                <p className="text-muted-foreground">info@zenbu.com</p>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function ContactPage() {
          <h3 className="font-semibold text-2xl text-center mb-6">Find Us Here</h3>
          <div className="aspect-video w-full">
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.297592942416!2d-122.419415484681!3d37.77492957975815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c1b2b3ce9%3A0x297298642a42b10!2sSan%20Francisco%20City%20Hall!5e0!3m2!1sen!2sus!4v1620067339732!5m2!1sen!2sus"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3508.835824283834!2d77.30792821507797!3d28.42468308250005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdc7a5f5f5f5d%3A0x8e7e4d8f2f2f2f2f!2sHSIIDC%2C%20Sector%2059%2C%20Faridabad%2C%20Haryana%20121004!5e0!3m2!1sen!2sin!4v1620067339732!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
