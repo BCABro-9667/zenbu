@@ -9,9 +9,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/context/cart-context';
 import { BuyNowModal } from '@/components/main/buy-now-modal';
 import ProductCard from '@/components/main/product-card';
-import { ShoppingCart, Zap, Star } from 'lucide-react';
+import { ShoppingCart, Zap, Star, Video, FileText } from 'lucide-react';
 import type { Product } from '@/lib/definitions';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,6 +98,22 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 <Zap className="mr-2 h-5 w-5" />
                 Buy Now
               </Button>
+            </div>
+            <div className="flex gap-4">
+              {product.videoUrl && (
+                <Button asChild size="lg" variant="outline">
+                  <Link href={product.videoUrl} target="_blank">
+                    <Video className="mr-2 h-5 w-5" /> Watch Video
+                  </Link>
+                </Button>
+              )}
+               {product.brochureUrl && (
+                <Button asChild size="lg" variant="outline">
+                  <Link href={product.brochureUrl} target="_blank">
+                    <FileText className="mr-2 h-5 w-5" /> Download Brochure
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

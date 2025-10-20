@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useFormStatus } from 'react-dom';
-import { useActionState, useEffect, useRef, useState, useTransition } from 'react';
+import { useActionState, useEffect, useState, useTransition } from 'react';
 
 import { addProductAction, generateDescriptionAction } from '@/lib/admin-actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,6 +26,8 @@ const productSchema = z.object({
   stock: z.coerce.number().int().min(0, 'Stock must be a non-negative integer'),
   imageUrl: z.string().url('Please enter a valid image URL'),
   galleryImageUrls: z.string().optional(),
+  videoUrl: z.string().url().optional().or(z.literal('')),
+  brochureUrl: z.string().url().optional().or(z.literal('')),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -132,7 +134,7 @@ export default function NewProductForm({ categories }: { categories: Category[] 
             <div className="md:col-span-1 space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Category & Images</CardTitle>
+                        <CardTitle>Category & Media</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                          <div className="space-y-2">
@@ -164,6 +166,16 @@ export default function NewProductForm({ categories }: { categories: Category[] 
                             <Label htmlFor="galleryImageUrls">Gallery Image URLs</Label>
                             <Textarea id="galleryImageUrls" placeholder="e.g. https://.../img1.png, https://.../img2.png" {...register('galleryImageUrls')} />
                             <p className="text-xs text-muted-foreground">Comma-separated URLs.</p>
+                         </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="videoUrl">Video URL</Label>
+                            <Input id="videoUrl" placeholder="https://youtube.com/watch?v=..." {...register('videoUrl')} />
+                            {errors.videoUrl && <p className="text-sm font-medium text-destructive">{errors.videoUrl.message}</p>}
+                         </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="brochureUrl">Brochure URL</Label>
+                            <Input id="brochureUrl" placeholder="https://example.com/brochure.pdf" {...register('brochureUrl')} />
+                            {errors.brochureUrl && <p className="text-sm font-medium text-destructive">{errors.brochureUrl.message}</p>}
                          </div>
                     </CardContent>
                 </Card>

@@ -12,6 +12,8 @@ export type Product = {
   isTopSale: boolean;
   isRecent: boolean;
   stock: number;
+  videoUrl?: string;
+  brochureUrl?: string;
 };
 
 export type Category = {

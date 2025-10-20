@@ -75,6 +75,8 @@ const productSchema = z.object({
     stock: z.coerce.number().int().min(0, 'Stock must be a non-negative integer'),
     imageUrl: z.string().url('Please enter a valid image URL'),
     galleryImageUrls: z.string().optional(),
+    videoUrl: z.string().url().optional().or(z.literal('')),
+    brochureUrl: z.string().url().optional().or(z.literal('')),
 });
 
 export async function addProductAction(prevState: any, formData: FormData) {
