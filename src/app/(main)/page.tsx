@@ -13,7 +13,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12 md:space-y-20 pb-20">
-      <div className="mt-2.5">
+      <div className="-mb-12 md:-mb-20">
         <HeroSlider />
       </div>
       <CategoryCircles />
