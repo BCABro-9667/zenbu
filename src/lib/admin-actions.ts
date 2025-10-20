@@ -2,7 +2,7 @@
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
 import { suggestCategories } from '@/ai/flows/category-suggestion-generator';
-import { addProduct, addCategory, deleteCategory, deleteProduct } from '@/lib/data';
+import { addProduct, addCategory, deleteCategory, deleteProduct, updateCategory } from '@/lib/data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
@@ -106,9 +106,12 @@ export async function addProductAction(prevState: any, formData: FormData) {
     redirect('/admin/products');
 }
 
+const categorySchema = z.object({
+    name: z.string().min(1, 'Category name cannot be empty.'),
+});
+
 export async function addCategoryAction(prevState: any, formData: FormData) {
-    const schema = z.object({ name: z.string().min(1, 'Category name cannot be empty.') });
-    const validatedFields = schema.safeParse({ name: formData.get('name') });
+    const validatedFields = categorySchema.safeParse({ name: formData.get('name') });
 
     if (!validatedFields.success) {
         return { message: validatedFields.error.flatten().fieldErrors.name?.[0] };
@@ -122,6 +125,28 @@ export async function addCategoryAction(prevState: any, formData: FormData) {
         return { message: 'Database error: Failed to add category.' };
     }
 }
+
+export async function updateCategoryAction(prevState: any, formData: FormData) {
+    const schema = z.object({
+        id: z.string(),
+        name: z.string().min(1, 'Category name cannot be empty.'),
+    });
+    const validatedFields = schema.safeParse(Object.fromEntries(formData.entries()));
+
+    if (!validatedFields.success) {
+        return { message: validatedFields.error.flatten().fieldErrors.name?.[0] || 'Invalid data.' };
+    }
+
+    try {
+        updateCategory(validatedFields.data.id, { name: validatedFields.data.name });
+        revalidatePath('/admin/categories');
+        revalidatePath('/category/[slug]', 'layout');
+        return { message: 'success' };
+    } catch (e: any) {
+        return { message: e.message || 'Database error: Failed to update category.' };
+    }
+}
+
 
 export async function deleteProductAction(id: string) {
     try {

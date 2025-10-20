@@ -129,6 +129,23 @@ export const addCategory = (category: Pick<Category, 'name'>) => {
     return newCategory;
 }
 
+export const updateCategory = (categoryId: string, categoryUpdate: Pick<Category, 'name'>) => {
+    const categoryIndex = categories.findIndex(c => c.id === categoryId);
+    if (categoryIndex !== -1) {
+        const newSlug = categoryUpdate.name.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+        
+        if (categories.some(c => c.slug === newSlug && c.id !== categoryId)) {
+            throw new Error('Another category with this name already exists.');
+        }
+
+        categories[categoryIndex].name = categoryUpdate.name;
+        categories[categoryIndex].slug = newSlug;
+        
+        return categories[categoryIndex];
+    }
+    return undefined;
+}
+
 export const deleteCategory = (categoryId: string) => {
     const categoryIndex = categories.findIndex(c => c.id === categoryId);
     if (categoryIndex !== -1) {

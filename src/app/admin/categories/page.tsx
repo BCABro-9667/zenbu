@@ -7,13 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { getCategories } from "@/lib/data";
-import { Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-react";
+import { Edit, Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useFormStatus } from 'react-dom';
-import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction } from "@/lib/admin-actions";
+import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction, updateCategoryAction } from "@/lib/admin-actions";
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import type { Category } from "@/lib/definitions";
 
 function AddCategoryForm() {
     const [state, formAction] = useActionState(addCategoryAction, { message: null });
@@ -42,6 +44,44 @@ function AddCategoryForm() {
     )
 }
 
+function EditCategoryDialog({ category, onOpenChange, open }: { category: Category; open: boolean; onOpenChange: (open: boolean) => void; }) {
+    const { toast } = useToast();
+    const [state, formAction] = useActionState(updateCategoryAction, { message: null });
+
+    useEffect(() => {
+        if (state.message === 'success') {
+            toast({ title: 'Category updated!' });
+            onOpenChange(false);
+        } else if (state.message) {
+            toast({ title: 'Error', description: state.message, variant: 'destructive' });
+        }
+    }, [state, toast, onOpenChange]);
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit Category</DialogTitle>
+                    <DialogDescription>
+                        Make changes to your category here. Click save when you're done.
+                    </DialogDescription>
+                </DialogHeader>
+                <form action={formAction} className="space-y-4">
+                    <input type="hidden" name="id" value={category.id} />
+                    <div className="space-y-2">
+                        <Label htmlFor="edit-cat-name">Category Name</Label>
+                        <Input id="edit-cat-name" name="name" defaultValue={category.name} />
+                    </div>
+                    <DialogFooter>
+                        <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+                        <Button type="submit">Save Changes</Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
 export default function CategoriesPage() {
     const categories = getCategories();
     const [isPending, startTransition] = useTransition();
@@ -51,6 +91,8 @@ export default function CategoriesPage() {
     const [suggestionState, suggestionAction] = useActionState(suggestCategoriesAction, { message: null, suggestions: [] });
     const { pending: suggestionsPending } = useFormStatus();
     const suggestionFormRef = useRef<HTMLFormElement>(null);
+
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
     useEffect(() => {
         if (suggestionState.message === 'success') {
@@ -114,6 +156,9 @@ export default function CategoriesPage() {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                     <DropdownMenuItem onSelect={() => setEditingCategory(cat)}>
+                                                        <Edit className="mr-2 h-4 w-4"/> Edit
+                                                    </DropdownMenuItem>
                                                     <DropdownMenuItem onSelect={() => handleDelete(cat.id)} className="text-destructive">
                                                         <Trash className="mr-2 h-4 w-4"/> Delete
                                                     </DropdownMenuItem>
@@ -172,6 +217,13 @@ export default function CategoriesPage() {
                     </CardContent>
                 </Card>
             </div>
+            {editingCategory && (
+                <EditCategoryDialog 
+                    category={editingCategory} 
+                    open={!!editingCategory} 
+                    onOpenChange={(open) => !open && setEditingCategory(null)}
+                />
+            )}
         </div>
     );
 }
