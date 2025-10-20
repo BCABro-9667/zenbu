@@ -62,7 +62,7 @@ export default function Footer() {
               <div>
                   <h4 className="font-semibold mb-4">Policies</h4>
                   <ul className="space-y-3">
-                      <FooterLink href="#">Privacy Policy</FooterLink>
+                      <FooterLink href="/privacy-policy">Privacy Policy</FooterLink>
                       <FooterLink href="#">Terms of Service</FooterLink>
                       <FooterLink href="#">Shipping & Refund</FooterLink>
                       <FooterLink href="#">E-Waste Collection</FooterLink>
