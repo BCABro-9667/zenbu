@@ -25,6 +25,7 @@ const productSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   stock: z.coerce.number().int().min(0, 'Stock must be a non-negative integer'),
   imageUrl: z.string().url('Please enter a valid image URL'),
+  galleryImageUrls: z.string().optional(),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -131,7 +132,7 @@ export default function NewProductForm({ categories }: { categories: Category[] 
             <div className="md:col-span-1 space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Category & Image</CardTitle>
+                        <CardTitle>Category & Images</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                          <div className="space-y-2">
@@ -155,9 +156,14 @@ export default function NewProductForm({ categories }: { categories: Category[] 
                             {errors.category && <p className="text-sm font-medium text-destructive">{errors.category.message}</p>}
                          </div>
                          <div className="space-y-2">
-                            <Label htmlFor="imageUrl">Product Image URL</Label>
+                            <Label htmlFor="imageUrl">Main Image URL</Label>
                             <Input id="imageUrl" placeholder="https://example.com/image.png" {...register('imageUrl')} />
                             {errors.imageUrl && <p className="text-sm font-medium text-destructive">{errors.imageUrl.message}</p>}
+                         </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="galleryImageUrls">Gallery Image URLs</Label>
+                            <Textarea id="galleryImageUrls" placeholder="e.g. https://.../img1.png, https://.../img2.png" {...register('galleryImageUrls')} />
+                            <p className="text-xs text-muted-foreground">Comma-separated URLs.</p>
                          </div>
                     </CardContent>
                 </Card>

@@ -73,6 +73,7 @@ const productSchema = z.object({
     category: z.string().min(1, 'Category is required'),
     stock: z.coerce.number().int().min(0, 'Stock must be a non-negative integer'),
     imageUrl: z.string().url('Please enter a valid image URL'),
+    galleryImageUrls: z.string().optional(),
 });
 
 export async function addProductAction(prevState: any, formData: FormData) {
@@ -86,11 +87,12 @@ export async function addProductAction(prevState: any, formData: FormData) {
     }
 
     try {
+        const galleryUrls = validatedFields.data.galleryImageUrls?.split(',').map(url => url.trim()).filter(url => url) || [];
+        
         addProduct({
             ...validatedFields.data,
-            // These are placeholders/defaults
+            galleryImageUrls: galleryUrls,
             longDescription: 'This is a default long description. Please edit it in the product management section.',
-            galleryImageUrls: [],
             isTopRated: false,
             isTopSale: false,
             isRecent: true,
