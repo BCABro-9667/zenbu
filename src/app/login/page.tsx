@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -21,10 +21,21 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
     try {
+      // First, try to sign in.
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/admin');
     } catch (error: any) {
-      setError(error.message);
+      // If sign-in fails because the user is not found, create a new user account.
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          router.push('/admin');
+        } catch (createError: any) {
+          setError(createError.message);
+        }
+      } else {
+        setError(error.message);
+      }
     }
   };
 
