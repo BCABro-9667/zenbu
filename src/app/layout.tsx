@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { CartProvider } from '@/context/cart-context';
 
 export const metadata: Metadata = {
-  title: 'E-Com Modern',
+  title: 'zenbu',
   description: 'A modern e-commerce application created with Firebase Studio.',
 };
 

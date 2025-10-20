@@ -72,7 +72,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center text-center">
-            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} E-Com Modern. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} zenbu. All rights reserved.</p>
         </div>
       </div>
       <div className="fixed bottom-4 right-4 flex flex-col items-center gap-4">
