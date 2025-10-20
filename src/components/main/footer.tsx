@@ -17,7 +17,7 @@ const FooterLink = ({ href, children }: { href: string, children: React.ReactNod
 export default function Footer() {
   return (
     <footer className="bg-card border-t">
-      <div className="container pt-16 pb-8">
+      <div className="container pt-16 pb-8 px-[5%]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           
           {/* Column 1: Logo & Contact */}
