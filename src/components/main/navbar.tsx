@@ -11,10 +11,10 @@ export default function Navbar() {
       <div className="container flex h-16 items-center px-[5%]">
         <Logo />
         <nav className="ml-10 hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground/60">Home</Link>
-          <Link href="/#categories" className="transition-colors hover:text-foreground/80 text-foreground/60">Categories</Link>
+          <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground">Home</Link>
+          <Link href="/about" className="transition-colors hover:text-foreground/80 text-foreground/60">About Us</Link>
           <Link href="/#products" className="transition-colors hover:text-foreground/80 text-foreground/60">Products</Link>
-          <Link href="/admin" className="transition-colors hover:text-foreground/80 text-foreground/60">Admin</Link>
+          <Link href="/contact" className="transition-colors hover:text-foreground/80 text-foreground/60">Contact Us</Link>
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <div className="hidden sm:flex flex-1 max-w-sm items-center space-x-2">
