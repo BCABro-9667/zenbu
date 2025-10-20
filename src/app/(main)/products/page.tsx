@@ -57,13 +57,6 @@ export default function ProductsPage() {
 
   return (
     <div className="container py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold tracking-tight">All Products</h1>
-        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Explore our complete collection of handcrafted furniture, designed to bring style and comfort to your home.
-        </p>
-      </div>
-      
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
