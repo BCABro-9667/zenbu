@@ -3,19 +3,19 @@
     {
       "id": "hero-1",
       "description": "Stylish living room with modern furniture",
-      "imageUrl": "https://images.unsplash.com/photo-1600210491369-e753d80a41f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBsaXZpbmdyb29tfGVufDB8fHx8MTc2MDczNDk2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1663756915301-2ba688e078cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bW9kZXJuJTIwbGl2aW5ncm9vbXxlbnwwfHx8fDE3NjA4NTYyNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "modern livingroom"
     },
     {
       "id": "hero-2",
       "description": "Minimalist bedroom with large window",
-      "imageUrl": "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtaW5pbWFsaXN0JTIwYmVkcm9vbXxlbnwwfHx8fDE3NjA3NjE5MTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1610307522657-8c0304960189?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYmVkcm9vbXxlbnwwfHx8fDE3NjA4OTMyMTR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "minimalist bedroom"
     },
     {
       "id": "hero-3",
       "description": "Cozy reading corner with armchair and lamp",
-      "imageUrl": "https://images.unsplash.com/photo-1602418514663-a1ee3c1cc626?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyZWFkaW5nJTIwY29ybmVyfGVufDB8fHx8MTc2MDc5MDI3N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1669729227685-770f727fb709?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyZWFkaW5nJTIwY29ybmVyfGVufDB8fHx8MTc2MDk0OTEzM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "reading corner"
     },
     {
