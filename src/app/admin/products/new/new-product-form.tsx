@@ -5,13 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect, useState, useTransition, useMemo } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 
 import { addProductAction, generateDescriptionAction } from '@/lib/admin-actions';
 import { getCategories } from '@/lib/data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Wand2 } from "lucide-react";
 import type { Category } from '@/lib/definitions';
@@ -40,7 +40,10 @@ export default function NewProductForm() {
 
     const { register, handleSubmit, formState: { errors }, setValue, watch, control } = useForm<ProductFormData>({
         resolver: zodResolver(productSchema),
-        defaultValues: { imageUrl: 'https://picsum.photos/seed/newprod/400/400' }
+        defaultValues: { 
+            description: 'Welcome to TinyMCE!',
+            imageUrl: 'https://picsum.photos/seed/newprod/400/400' 
+        }
     });
 
     const [formState, formAction] = useActionState(addProductAction, { message: null, errors: {} });
@@ -103,14 +106,31 @@ export default function NewProductForm() {
                             <p className="text-xs text-muted-foreground">Comma-separated keywords for AI generation.</p>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="description">Description</Label>
-                            <div className="relative">
-                                <Textarea id="description" placeholder="A compelling description of your product." rows={6} {...register('description')} />
-                                <Button type="button" size="sm" variant="outline" className="absolute bottom-2 right-2 flex items-center gap-2" onClick={handleGenerateDescription} disabled={isGenerating}>
+                            <div className="flex justify-between items-center">
+                               <Label htmlFor="description">Description</Label>
+                                <Button type="button" size="sm" variant="outline" className="flex items-center gap-2" onClick={handleGenerateDescription} disabled={isGenerating}>
                                     {isGenerating ? <Loader2 className="animate-spin" /> : <Wand2 />}
                                     {isGenerating ? "Generating..." : "Generate with AI"}
                                 </Button>
                             </div>
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({ field }) => (
+                                    <Editor
+                                        apiKey='p2yks470qo6wqku09s7bsqaqqnb9lgno6bgvbbsa42pezja1'
+                                        value={field.value}
+                                        onEditorChange={(content) => field.onChange(content)}
+                                        init={{
+                                            height: 300,
+                                            menubar: false,
+                                            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                                            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                                            content_style: 'body { font-family:Inter,sans-serif; font-size:14px }'
+                                        }}
+                                    />
+                                )}
+                            />
                             {errors.description && <p className="text-sm font-medium text-destructive">{errors.description.message}</p>}
                         </div>
                     </CardContent>
@@ -166,7 +186,7 @@ export default function NewProductForm() {
                          </div>
                          <div className="space-y-2">
                             <Label htmlFor="galleryImageUrls">Gallery Image URLs</Label>
-                            <Textarea id="galleryImageUrls" placeholder="e.g. https://.../img1.png, https://.../img2.png" {...register('galleryImageUrls')} />
+                            <Input id="galleryImageUrls" placeholder="e.g. https://.../img1.png, https://.../img2.png" {...register('galleryImageUrls')} />
                             <p className="text-xs text-muted-foreground">Comma-separated URLs.</p>
                          </div>
                          <div className="space-y-2">
