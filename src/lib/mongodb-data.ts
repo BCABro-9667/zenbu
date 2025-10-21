@@ -1,7 +1,8 @@
+
 // MongoDB data service to replace Firebase operations
 import type { Product, Category, Order, Lead } from './definitions';
-import connect from '@/lib/mongoose';
-import Order from '@/models/Order';
+import connect from '@/lib/mongodb';
+import Order from '@/lib/models/Order';
 
 const API_BASE = '/api';
 
@@ -231,33 +232,4 @@ export async function createLead(leadData: {
   }
   
   return data.data;
-}
-
-// Fix: robust API response parser to replace the malformed/concatenated code
-async function parseApiResponse(response: Response) {
-  // attempt to parse JSON, tolerate invalid JSON
-  const json = await response.json().catch(() => null);
-
-  // HTTP-level failure
-  if (!response.ok) {
-    throw new Error((json && (json.error || json.message)) || `Request failed: ${response.status}`);
-  }
-
-  // application-level failure (common { success: false, error: '...' } patterns)
-  if (json && json.success === false) {
-    throw new Error(json.error || json.message || 'Request failed');
-  }
-
-  // prefer data payload if present, otherwise return entire json
-  return (json && (json.data ?? json)) ?? null;
-}
-
-// Example usage: createLead (replace or adapt to your real function names)
-export async function createLead(payload: any) {
-  const response = await fetch('/api/leads', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  return await parseApiResponse(response);
 }

@@ -6,11 +6,7 @@ import CategoryCircles from '@/components/main/category-circles';
 import ProductSection from '@/components/main/product-section';
 import BigBanner from '@/components/main/big-banner';
 import { useMemo, useState, useEffect } from 'react';
-<<<<<<< HEAD
-import { getProducts } from '@/lib/data';
-=======
 import { getProducts } from '@/lib/mongodb-data';
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
 import type { Product } from '@/lib/definitions';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -19,10 +15,6 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-<<<<<<< HEAD
-    setAllProducts(getProducts());
-    setIsLoading(false);
-=======
     const fetchProducts = async () => {
       try {
         const products = await getProducts();
@@ -35,7 +27,6 @@ export default function HomePage() {
     };
 
     fetchProducts();
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
   }, []);
 
   const topRatedProducts = useMemo(() => allProducts?.filter(p => p.isTopRated).slice(0, 4) || [], [allProducts]);
