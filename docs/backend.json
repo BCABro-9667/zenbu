@@ -24,24 +24,16 @@
         },
         "imageUrl": {
           "type": "string",
-          "description": "URL of the product image.",
+          "description": "URL of the product's image.",
           "format": "uri"
         },
         "categoryId": {
           "type": "string",
           "description": "Reference to Category. (Relationship: Category 1:N Product)"
         },
-        "salePrice": {
+        "stockQuantity": {
           "type": "number",
-          "description": "Sale price of the product, if applicable."
-        },
-        "isTopRated": {
-          "type": "boolean",
-          "description": "Indicates if the product is top-rated."
-        },
-        "isTopSale": {
-          "type": "boolean",
-          "description": "Indicates if the product is a top sale."
+          "description": "The amount of stock available for this product."
         }
       },
       "required": [
@@ -50,7 +42,8 @@
         "description",
         "price",
         "imageUrl",
-        "categoryId"
+        "categoryId",
+        "stockQuantity"
       ]
     },
     "Category": {
@@ -73,7 +66,7 @@
         },
         "imageUrl": {
           "type": "string",
-          "description": "URL of the category image.",
+          "description": "URL of the category's image.",
           "format": "uri"
         }
       },
@@ -88,7 +81,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Lead",
       "type": "object",
-      "description": "Represents a lead captured from the website (e.g., contact form submission).",
+      "description": "Represents a lead captured through the website.",
       "properties": {
         "id": {
           "type": "string",
@@ -113,7 +106,7 @@
         },
         "dateCreated": {
           "type": "string",
-          "description": "Date and time the lead was created.",
+          "description": "Date when the lead was created.",
           "format": "date-time"
         }
       },
@@ -121,6 +114,7 @@
         "id",
         "name",
         "email",
+        "phone",
         "message",
         "dateCreated"
       ]
@@ -129,7 +123,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Order",
       "type": "object",
-      "description": "Represents an order placed by a customer.",
+      "description": "Represents an order placed by a user.",
       "properties": {
         "id": {
           "type": "string",
@@ -141,20 +135,20 @@
         },
         "orderDate": {
           "type": "string",
-          "description": "Date the order was placed.",
+          "description": "Date when the order was placed.",
           "format": "date-time"
         },
         "totalAmount": {
           "type": "number",
           "description": "Total amount of the order."
         },
+        "status": {
+          "type": "string",
+          "description": "Status of the order (e.g., pending, processing, completed)."
+        },
         "shippingAddress": {
           "type": "string",
           "description": "Shipping address for the order."
-        },
-        "status": {
-          "type": "string",
-          "description": "Status of the order (e.g., pending, processing, shipped, delivered)."
         }
       },
       "required": [
@@ -162,8 +156,8 @@
         "customerId",
         "orderDate",
         "totalAmount",
-        "shippingAddress",
-        "status"
+        "status",
+        "shippingAddress"
       ]
     },
     "OrderItem": {
@@ -188,7 +182,7 @@
           "type": "number",
           "description": "Quantity of the product in the order item."
         },
-        "price": {
+        "unitPrice": {
           "type": "number",
           "description": "Price of the product at the time of the order."
         }
@@ -198,7 +192,7 @@
         "orderId",
         "productId",
         "quantity",
-        "price"
+        "unitPrice"
       ]
     },
     "Customer": {
@@ -238,7 +232,44 @@
         "firstName",
         "lastName",
         "email",
+        "phone",
         "address"
+      ]
+    },
+    "Recommendation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Recommendation",
+      "type": "object",
+      "description": "Represents product recommendations for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the recommendation."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to Customer. (Relationship: Customer 1:N Recommendation)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to Product. (Relationship: Product 1:N Recommendation)"
+        },
+        "recommendationDate": {
+          "type": "string",
+          "description": "Date when the recommendation was generated.",
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason for the recommendation (e.g., viewed history, similar items)."
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "productId",
+        "recommendationDate",
+        "reason"
       ]
     }
   },
@@ -251,33 +282,33 @@
   "firestore": {
     "structure": [
       {
-        "path": "/products/{productId}",
-        "definition": {
-          "entityName": "Product",
-          "schema": {
-            "$ref": "#/backend/entities/Product"
-          },
-          "description": "Stores product information. Requires admin role for create, update, and delete operations.",
-          "params": [
-            {
-              "name": "productId",
-              "description": "The unique identifier for the product."
-            }
-          ]
-        }
-      },
-      {
         "path": "/categories/{categoryId}",
         "definition": {
           "entityName": "Category",
           "schema": {
             "$ref": "#/backend/entities/Category"
           },
-          "description": "Stores category information. Requires admin role for create, update, and delete operations.",
+          "description": "Stores category information. Publicly readable.",
           "params": [
             {
               "name": "categoryId",
-              "description": "The unique identifier for the category."
+              "description": "Unique identifier for the category."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Stores product information. Publicly readable.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "Unique identifier for the product."
             }
           ]
         }
@@ -289,11 +320,67 @@
           "schema": {
             "$ref": "#/backend/entities/Lead"
           },
-          "description": "Stores lead information submitted through the website. Requires admin role for read, create, update, and delete operations.",
+          "description": "Stores leads captured from the website. Only accessible by admins.",
           "params": [
             {
               "name": "leadId",
-              "description": "The unique identifier for the lead."
+              "description": "Unique identifier for the lead."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores orders for a specific user. Accessible by the user and admins.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user (customer)."
+            },
+            {
+              "name": "orderId",
+              "description": "Unique identifier for the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/recommendations/{recommendationId}",
+        "definition": {
+          "entityName": "Recommendation",
+          "schema": {
+            "$ref": "#/backend/entities/Recommendation"
+          },
+          "description": "Stores product recommendations for a specific user. Accessible by the user and admins.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "Unique identifier for the user (customer)."
+            },
+            {
+              "name": "recommendationId",
+              "description": "Unique identifier for the recommendation."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/order_items/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores items within an order. Requires admin or user access for management.",
+          "params": [
+            {
+              "name": "orderItemId",
+              "description": "Unique identifier for the order item."
             }
           ]
         }
@@ -305,47 +392,11 @@
           "schema": {
             "$ref": "#/backend/entities/Customer"
           },
-          "description": "Stores customer profile information. Customers can only read/write their own profile data.",
+          "description": "Stores customer information. Potentially admin-managed or self-managed.",
           "params": [
             {
               "name": "customerId",
-              "description": "The unique identifier for the customer, matching the user ID."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/orders/{orderId}",
-        "definition": {
-          "entityName": "Order",
-          "schema": {
-            "$ref": "#/backend/entities/Order"
-          },
-          "description": "Stores order information. Customers can only read/write orders associated with their customer ID.",
-          "params": [
-            {
-              "name": "orderId",
-              "description": "The unique identifier for the order."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/orders/{orderId}/orderItems/{orderItemId}",
-        "definition": {
-          "entityName": "OrderItem",
-          "schema": {
-            "$ref": "#/backend/entities/OrderItem"
-          },
-          "description": "Stores order item information for a specific order. Customers can only read/write order items associated with their orders.",
-          "params": [
-            {
-              "name": "orderId",
-              "description": "The unique identifier for the order."
-            },
-            {
-              "name": "orderItemId",
-              "description": "The unique identifier for the order item."
+              "description": "Unique identifier for the customer."
             }
           ]
         }
@@ -353,20 +404,20 @@
       {
         "path": "/roles_admin/{userId}",
         "definition": {
-          "entityName": "adminRole",
+          "entityName": "role_admin",
           "schema": {
             "$ref": "#/backend/entities/Customer"
           },
-          "description": "Used to check if a user has admin role. The existence of the document grants admin privileges.",
+          "description": "Grants admin roles. Existence of a document grants admin privileges.",
           "params": [
             {
               "name": "userId",
-              "description": "The unique identifier for the user."
+              "description": "Unique identifier for the user who has admin privileges."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to support an e-commerce application with features like product catalogs, categories, lead capture, and order management.  The structure emphasizes Authorization Independence by avoiding `get()` calls in security rules, leveraging denormalization where necessary. Structural Segregation is applied by keeping data with differing access needs in separate collections. Access Modeling follows consistent patterns, primarily path-based ownership and the membership map approach for collaborative data where applicable.  This design ensures clarity, predictability, and simplifies security rule implementation.\n\nSpecifically:\n\n*   **Products and Categories:** Stored in top-level collections (`/products`, `/categories`) for easy access and management. The `categoryId` in the `Product` entity establishes the relationship between products and categories, enabling efficient querying of products within a specific category.\n*   **Leads:** Stored in the `/leads` collection.  Given that leads are typically managed by admins, a dedicated collection simplifies security rules.\n*   **Orders and OrderItems:** Orders are stored under `/orders` and OrderItems are nested under orders as a subcollection (`/orders/{orderId}/orderItems`).  This reflects the hierarchical relationship.  Since orders are owned by customers, the customer ID is included in the order document.\n*   **Customers:** Customer data is stored in the `/customers/{customerId}` collection, enabling path-based access control.\n\nAuthorization Independence is achieved as follows:\n\n*   **No `get()` calls:**  The structure avoids the need for `get()` calls in security rules by denormalizing authorization data when needed.  For example, if access to `orderItems` depended on the `customerID` in the `order` document, we would denormalize the `customerID` to the `orderItems` documents.\n\nQAPs are supported as follows:\n\n*   **Secure List Operations:** Each top-level collection has a homogeneous security posture.  For example, only admins can `list` the `/leads` collection.  Users can only `list` orders associated with their customer ID in `/customers/{customerId}/orders`.\n*   **Role-Based Access Control:**  Admins are managed via the `/roles_admin/{uid}` document existence. This ensures that only authorized users can perform administrative tasks.\n\nThis structure prioritizes security, scalability, and debuggability by adhering to the core design principles and strategy mandates."
+    "reasoning": "This Firestore structure is designed for a modern e-commerce website with an admin dashboard, focusing on security, scalability, and maintainability.  It prioritizes Authorization Independence by avoiding `get()` calls in security rules through denormalization where necessary.  It utilizes structural segregation to ensure that collections contain documents with homogeneous security postures.\n\n**Key Structural Decisions & Justifications:**\n\n*   **/categories Collection:** Stores category information.  Publicly readable, so no specific authorization concerns beyond basic validation.\n*   **/products Collection:** Stores product information. Publicly readable, so no specific authorization concerns beyond basic validation.\n*   **/leads Collection:**  Stores leads captured from the website. Only accessible by admins. \n*   **/users/{userId}/orders Collection:** Each user has their own orders stored in a subcollection. Only the user or an admin can access these.\n*   **/users/{userId}/recommendations Collection:**  Each user has their AI-powered recommendations. Only the user or an admin can access these.\n*   **/order_items Collection:** Stores items within an order, with a reference to the order. Requires admin or user access for management.\n*   **/customers Collection:** Stores customer information, which could be admin-managed or self-managed.\n*   **/roles_admin/{userId} Collection:** Used to grant admin roles. Existence of a document at this path grants admin privileges to the user.\n\n**Authorization Independence (Denormalization):**\n\n*   The structure avoids hierarchical authorization dependencies (`get()` calls) in security rules. For example, access to orders is based on the `customerId` field and/or the path `/users/{userId}/orders/{orderId}` directly, rather than requiring a `get()` on the customer document itself. The presence of a document in `/roles_admin/{userId}` grants admin rights, eliminating the need to read claims or user documents for role verification.\n\n**QAPs (Rules are Not Filters):**\n\n*   The segregation of data based on access control needs (e.g., using `/users/{userId}/orders` for user-specific data) enables secure `list` operations.  Admins can list all leads, but users can only list their own orders without exposing unauthorized data. The  `/roles_admin` collection also supports efficient role-based filtering (existence check).\n\nThis design allows for clear and concise security rules that are easy to understand and maintain, promoting a secure and scalable application."
   }
 }
