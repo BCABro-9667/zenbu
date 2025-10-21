@@ -5,16 +5,9 @@ import { PageHeader } from "@/components/admin/page-header";
 import { RecentOrders } from "@/components/admin/recent-orders";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingCart, Tag } from "lucide-react";
-<<<<<<< HEAD
-import { getProducts, getCategories, getOrders } from '@/lib/data';
-import type { Product, Category, Order } from '@/lib/definitions';
-import { Skeleton } from '@/components/ui/skeleton';
-=======
 import { getProducts, getCategories, getOrders } from '@/lib/mongodb-data';
 import type { Product, Category, Order } from '@/lib/definitions';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useMemo, useState, useEffect } from "react";
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
 
 export default function AdminDashboard() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -23,12 +16,6 @@ export default function AdminDashboard() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-<<<<<<< HEAD
-        setProducts(getProducts());
-        setCategories(getCategories());
-        setOrders(getOrders());
-        setIsLoading(false);
-=======
         const fetchData = async () => {
             try {
                 const [productsData, categoriesData, ordersData] = await Promise.all([
@@ -48,16 +35,11 @@ export default function AdminDashboard() {
         };
 
         fetchData();
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
     }, []);
 
     const totalRevenue = useMemo(() => orders?.reduce((sum, order) => sum + order.total, 0) || 0, [orders]);
     const pendingOrders = useMemo(() => orders?.filter(o => o.status === 'Pending').length || 0, [orders]);
-<<<<<<< HEAD
     
-=======
-
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
     return (
         <div>
             <PageHeader title="Dashboard" description="An overview of your store's performance." />
@@ -109,3 +91,4 @@ export default function AdminDashboard() {
         </div>
     );
 }
+
