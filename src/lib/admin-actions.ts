@@ -1,3 +1,4 @@
+
 'use server';
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
@@ -77,6 +78,9 @@ const productSchema = z.object({
     galleryImageUrls: z.string().optional(),
     videoUrl: z.string().url().optional().or(z.literal('')),
     brochureUrl: z.string().url().optional().or(z.literal('')),
+    metaTitle: z.string().optional(),
+    metaKeywords: z.string().optional(),
+    metaDescription: z.string().optional(),
 });
 
 export async function addProductAction(prevState: any, formData: any) {
@@ -196,3 +200,5 @@ export async function updateOrderStatusAction(orderId: string, status: Order['st
         return { message: 'Storage error: Failed to update order status.' };
     }
 }
+
+    

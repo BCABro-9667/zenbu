@@ -1,3 +1,4 @@
+
 export type Product = {
   id: string;
   name: string;
@@ -15,6 +16,9 @@ export type Product = {
   videoUrl?: string;
   brochureUrl?: string;
   specifications?: Record<string, string>;
+  metaTitle?: string;
+  metaKeywords?: string;
+  metaDescription?: string;
 };
 
 export type Category = {
@@ -58,3 +62,5 @@ export type Lead = {
     message: string;
     dateCreated: Date;
 }
+
+    

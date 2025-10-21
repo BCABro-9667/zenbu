@@ -19,6 +19,7 @@ import type { Category } from '@/lib/definitions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { Textarea } from '@/components/ui/textarea';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -31,6 +32,9 @@ const productSchema = z.object({
   galleryImageUrls: z.string().optional(),
   videoUrl: z.string().url().optional().or(z.literal('')),
   brochureUrl: z.string().url().optional().or(z.literal('')),
+  metaTitle: z.string().optional(),
+  metaKeywords: z.string().optional(),
+  metaDescription: z.string().optional(),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -170,6 +174,26 @@ export default function NewProductForm() {
                         </div>
                     </CardContent>
                 </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>SEO Details</CardTitle>
+                        <CardDescription>Enter the meta information for better search engine visibility.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="metaTitle">Meta Title</Label>
+                            <Input id="metaTitle" placeholder="e.g. Modern Velvet Sofa | zenbu" {...register('metaTitle')} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                            <Input id="metaKeywords" placeholder="e.g. sofa, velvet, modern" {...register('metaKeywords')} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="metaDescription">Meta Description</Label>
+                            <Textarea id="metaDescription" placeholder="A short description for search engines." {...register('metaDescription')} />
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
             <div className="md:col-span-1 space-y-6">
                 <Card>
@@ -224,3 +248,5 @@ export default function NewProductForm() {
         </form>
     );
 }
+
+    

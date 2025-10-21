@@ -51,7 +51,7 @@ const defaultCategories: Category[] = [
     { id: '1', name: 'Chairs', slug: 'chairs', imageUrl: PlaceHolderImages.find(p => p.id === 'category-1')?.imageUrl || '', imageHint: 'armchair' },
     { id: '2', name: 'Sofas', slug: 'sofas', imageUrl: PlaceHolderImages.find(p => p.id === 'category-2')?.imageUrl || '', imageHint: 'sofa' },
     { id: '3', name: 'Tables', slug: 'tables', imageUrl: PlaceHolderImages.find(p => p.id === 'category-3')?.imageUrl || '', imageHint: 'dining table' },
-    { id: '4', name: 'Beds', slug: 'beds', imageUrl: PlaceHolderImages.find(p => p.id === 'category-4')?.imageUrl || '', imageHint: 'bedroom' },
+    { id: '4', name: 'Beds', slug: 'beds', imageUrl: PlaceHolderImages.find(p => p.id === 'category-4')?.imageUrl || '', imageHint: 'bed' },
     { id: '5', name: 'Storage', slug: 'storage', imageUrl: PlaceHolderImages.find(p => p.id === 'category-5')?.imageUrl || '', imageHint: 'bookshelf' },
     { id: '6', name: 'Lighting', slug: 'lighting', imageUrl: PlaceHolderImages.find(p => p.id === 'category-5')?.imageUrl || '', imageHint: 'lamp' },
     { id: '7', name: 'Outdoor', slug: 'outdoor', imageUrl: PlaceHolderImages.find(p => p.id === 'category-5')?.imageUrl || '', imageHint: 'patio chair' },
@@ -191,3 +191,5 @@ export function getHeroSliderImages() {
 export function getBannerImage() {
     return PlaceHolderImages.find(img => img.id === 'banner-1');
 }
+
+    
