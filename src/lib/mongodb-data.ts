@@ -2,7 +2,6 @@
 // MongoDB data service to replace Firebase operations
 import type { Product, Category, Order, Lead } from './definitions';
 import connect from '@/lib/mongodb';
-import Order from '@/lib/models/Order';
 
 const API_BASE = '/api';
 
@@ -190,6 +189,7 @@ export async function createOrder(orderData: {
 
 export async function updateOrderStatus(orderId: string, status: string) {
   await connect();
+  const Order = (await import('@/lib/models/Order')).default;
   const updated = await Order.findByIdAndUpdate(
     orderId,
     { status },

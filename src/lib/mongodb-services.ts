@@ -1,5 +1,10 @@
 import connectDB from './mongodb';
-import { Product, Category, Order, Lead, User, IProduct, ICategory, IOrder, ILead, IUser, ICartItem, ICustomer } from './models';
+import Product from './models/Product';
+import Category from './models/Category';
+import Order from './models/Order';
+import Lead from './models/Lead';
+import User from './models/User';
+import type { IProduct, ICategory, IOrder, ILead, IUser, ICartItem, ICustomer } from './models';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
