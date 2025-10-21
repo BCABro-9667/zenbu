@@ -1,3 +1,4 @@
+
 'use client';
 
 import { PlaceHolderImages } from './placeholder-images';
@@ -103,7 +104,7 @@ export function getCategoryBySlug(slug: string) {
     return categories.find(c => c.slug === slug);
 }
 
-export function addCategory(categoryData: Omit<Category, 'id' | 'imageHint'>) {
+export function addCategory(categoryData: { name: string; slug: string; imageUrl: string }) {
     const categories = getCategories();
     const newId = (Math.max(0, ...categories.map(c => parseInt(c.id, 10))) + 1).toString();
     const newCategory: Category = {
