@@ -24,8 +24,8 @@ export default function HomePage() {
   const recentProducts = useMemo(() => allProducts?.filter(p => p.isRecent).slice(0, 8) || [], [allProducts]);
 
   return (
-    <div className="space-y-12 md:space-y-20 pb-20">
-      <div className="-mb-12 md:-mb-20">
+    <div className="space-y-12 pb-20">
+      <div className="-mb-12">
         <HeroSlider />
       </div>
       <CategoryCircles />
