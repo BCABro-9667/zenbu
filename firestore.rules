@@ -1,172 +1,48 @@
-/**
- * @fileoverview Firestore Security Rules for the e-commerce application.
- *
- * Core Philosophy:
- * This ruleset enforces a combination of public read access for product catalogs,
- * admin-only access for sensitive data like leads and orders, and user-ownership
- * for personal data like recommendations.  It leverages a dedicated "roles_admin"
- * collection to manage admin privileges.
- *
- * Data Structure:
- * - /categories/{categoryId}: Public product categories.
- * - /products/{productId}: Public product information.
- * - /leads/{leadId}: Leads captured from the website, admin-only.
- * - /orders/{orderId}: Orders placed by customers, admin-only.
- * - /users/{userId}/recommendations/{recommendationId}: Product recommendations for a specific user.
- * - /order_items/{orderItemId}: Items within an order; requires admin or user access.
- * - /customers/{customerId}: Customer information.
- * - /roles_admin/{userId}: Documents granting admin privileges. Existence implies admin role.
- *
- * Key Security Decisions:
- * - Public read access is granted to the "categories" and "products" collections to allow open browsing.
- * - "leads" and "orders" collections are restricted to admin-only access to protect sensitive business data.
- * - User-specific data under "/users/{userId}" is protected by ownership checks.
- * - Admin privileges are determined by the presence of a document in the "roles_admin" collection.
- * - Listing of "orders" is limited to admins to prevent unauthorized data exposure.
- *
- * Denormalization for Authorization:
- * - Admin status is determined by the existence of a document in `/roles_admin/{userId}`.
- *   This avoids the need for custom claims or external role management systems, and it eliminates
- *   the need for `get()` calls in the rules.
- */
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /**
-     * @description Grants public read access to category information.
-     * @path /categories/{categoryId}
-     * @allow (get, list) Everyone can read category data.
-     * @deny (create, update, delete) No one can create, update, or delete category data through the rules.
-     * @principle Publicly accessible data.
-     */
+    // Function to check if a user is an admin
+    function isAdmin(userId) {
+      return exists(/databases/$(database)/documents/roles_admin/$(userId));
+    }
+
+    // Categories: Publicly readable, admin-writable
     match /categories/{categoryId} {
-      allow get, list: if true;
-      allow create, update, delete: if false;
+      allow read: if true;
+      allow create, update, delete: if request.auth != null && isAdmin(request.auth.uid);
     }
 
-    /**
-     * @description Grants public read access to product information.
-     * @path /products/{productId}
-     * @allow (get, list) Everyone can read product data.
-     * @deny (create, update, delete) No one can create, update, or delete product data through the rules.
-     * @principle Publicly accessible data.
-     */
+    // Products: Publicly readable, admin-writable
     match /products/{productId} {
-      allow get, list: if true;
-      allow create, update, delete: if false;
+      allow read: if true;
+      allow write: if request.auth != null && isAdmin(request.auth.uid);
     }
 
-    /**
-     * @description Restricts lead access to admins only.
-     * @path /leads/{leadId}
-     * @allow (get, list, create, update, delete) Admins can manage leads.
-     * @deny (get, list, create, update, delete) Non-admins cannot access leads.
-     * @principle Admin-only access for sensitive data.
-     */
+    // Leads: Admin-only access
     match /leads/{leadId} {
-      allow get, list, create, update, delete: if isAdmin();
+      allow read, write: if request.auth != null && isAdmin(request.auth.uid);
     }
 
-    /**
-     * @description Restricts order access to admins only.
-     * @path /orders/{orderId}
-     * @allow (get, list, create, update, delete) Admins can manage orders.
-     * @deny (get, list, create, update, delete) Non-admins cannot access orders.
-     * @principle Admin-only access for sensitive data.
-     */
+    // Orders: Admin-only access
     match /orders/{orderId} {
-      allow get, list, create, update, delete: if isAdmin();
+      allow read, write: if request.auth != null && isAdmin(request.auth.uid);
     }
 
-    /**
-     * @description Manages product recommendations for a specific user.
-     * @path /users/{userId}/recommendations/{recommendationId}
-     * @allow (get, list) User can read their recommendations.
-     * @allow (create, update, delete) User can manage their recommendations. Admins can also manage them.
-     * @deny (get, list, create, update, delete) Other users cannot access these recommendations.
-     * @principle User-ownership and admin override.
-     */
+    // Recommendations: User and Admin access
     match /users/{userId}/recommendations/{recommendationId} {
-      allow get, list: if isOwner(userId) || isAdmin();
-      allow create: if (isOwner(userId) || isAdmin());
-      allow update: if (isExistingOwner(userId) || isAdmin());
-      allow delete: if (isExistingOwner(userId) || isAdmin());
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isAdmin(request.auth.uid));
     }
 
-    /**
-     * @description Manages order items with admin or user access.
-     * @path /order_items/{orderItemId}
-     * @allow (get, list, create, update, delete) Admins can manage order items.
-     * @deny (get, list, create, update, delete) Non-admins cannot access order items.
-     * @principle Admin-only access for order items.
-     */
-    match /order_items/{orderItemId} {
-      allow get, list, create, update, delete: if isAdmin();
-    }
-
-    /**
-     * @description Manages customer information.
-     * @path /customers/{customerId}
-     * @allow (get, list, create, update, delete) Admins can manage customers.
-     * @deny (get, list, create, update, delete) Non-admins cannot access customers.
-     * @principle Admin-only access for customer management.
-     */
+    // Customers: Admin-managed or self-managed
     match /customers/{customerId} {
-      allow get, list, create, update, delete: if isAdmin();
+      allow read, write: if request.auth != null && (request.auth.uid == customerId || isAdmin(request.auth.uid));
     }
-
-     /**
-      * @description Grants admin privileges based on document existence.
-      * @path /roles_admin/{userId}
-      * @allow (get, list, create, update, delete) Only admins can manage the list of admins.
-      * @deny (get, list, create, update, delete) Non-admins cannot become admins themselves.
-      * @principle Admin role management.
-      */
+    
+    // Admin roles: Only other admins can grant admin roles (for future use)
     match /roles_admin/{userId} {
-      allow get: if isAdmin();
-      allow list: if isAdmin();
-      allow create: if isAdmin();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
-    }
-
-    // ----- HELPER FUNCTIONS -----
-
-    /**
-     * @description Checks if the user is signed in.
-     * @returns {boolean} True if the user is signed in, false otherwise.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * @description Checks if the user is the owner of the resource based on the userId.
-     * @param {string} userId - The user ID to compare with the request's authentication UID.
-     * @returns {boolean} True if the user is the owner, false otherwise.
-     */
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    /**
-     * @description Checks if the user is the owner of an existing resource.
-     *              It combines the ownership check with the existence check.
-     * @param {string} userId - The user ID to compare with the resource's UID.
-     * @returns {boolean} True if the user is the owner and the resource exists, false otherwise.
-     */
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
-
-    /**
-     * @description Checks if the user has admin privileges by checking for the existence of a document
-     *              in the `/roles_admin/{userId}` collection.
-     * @returns {boolean} True if the user is an admin, false otherwise.
-     */
-    function isAdmin() {
-      return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+      allow read, write: if request.auth != null && isAdmin(request.auth.uid);
     }
   }
 }
