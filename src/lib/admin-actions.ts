@@ -3,7 +3,7 @@
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
 import { suggestCategories } from '@/ai/flows/category-suggestion-generator';
-import { addProduct, addCategory, deleteCategory, deleteProduct, updateCategory, updateOrderStatus } from '@/lib/data';
+import { createProduct, createCategory, deleteCategory, deleteProduct, updateCategory, updateOrderStatus } from '@/lib/mongodb-data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
@@ -96,7 +96,11 @@ export async function addProductAction(prevState: any, formData: any) {
     try {
         const galleryUrls = validatedFields.data.galleryImageUrls?.split(',').map(url => url.trim()).filter(url => url) || [];
         
+<<<<<<< HEAD
         addProduct({
+=======
+        await createProduct({
+>>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
             ...validatedFields.data,
             longDescription: 'This is a default long description. Please edit it in the product management section.',
             galleryImageUrls: galleryUrls,
@@ -134,11 +138,15 @@ export async function addCategoryAction(prevState: any, formData: FormData) {
     }
 
     try {
+<<<<<<< HEAD
         addCategory({ 
             name: validatedFields.data.name,
             slug: validatedFields.data.slug,
             imageUrl: validatedFields.data.imageUrl,
         });
+=======
+        await createCategory({ name: validatedFields.data.name });
+>>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
         revalidatePath('/admin/categories');
         return { message: 'success' };
     } catch (e) {

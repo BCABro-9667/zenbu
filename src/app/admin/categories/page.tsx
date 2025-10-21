@@ -13,9 +13,14 @@ import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction, updat
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+<<<<<<< HEAD
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { Category } from "@/lib/definitions";
 import { getCategories } from "@/lib/data";
+=======
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { getCategories } from "@/lib/mongodb-data";
+>>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
 
 function AddCategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void }) {
     const [state, formAction] = useActionState(addCategoryAction, { message: null });
@@ -99,8 +104,29 @@ function EditCategoryDialog({ category, onOpenChange, open, onCategoryUpdated }:
 }
 
 export default function CategoriesPage() {
+<<<<<<< HEAD
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+=======
+    const [categories, setCategories] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const data = await getCategories();
+                setCategories(data || []);
+            } catch (e) {
+                console.error('Failed to load categories:', e);
+                setCategories([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadCategories();
+    }, []);
+
+>>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
 
