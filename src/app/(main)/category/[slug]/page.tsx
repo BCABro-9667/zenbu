@@ -85,11 +85,6 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="container py-12">
-      <h1 className="text-4xl font-bold tracking-tight text-center mb-4">{category?.name}</h1>
-      <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10">
-        Browse our curated collection of high-quality products for your {category?.name.toLowerCase()}.
-      </p>
-
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
