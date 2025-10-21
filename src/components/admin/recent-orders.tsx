@@ -1,7 +1,8 @@
 
 'use client';
+
 import Link from "next/link";
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,13 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-<<<<<<< HEAD
-import type { Order, OrderStatus } from "@/lib/definitions";
-import { getRecentOrders } from "@/lib/data";
-=======
-import { useEffect, useMemo, useState } from "react";
 import { getOrders } from "@/lib/mongodb-data";
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
+import type { Order, OrderStatus } from "@/lib/definitions";
 
 const getStatusVariant = (status: OrderStatus): "destructive" | "success" | "secondary" | "default" => {
     switch (status) {
@@ -42,15 +38,7 @@ const getStatusVariant = (status: OrderStatus): "destructive" | "success" | "sec
 };
 
 export function RecentOrders() {
-<<<<<<< HEAD
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setRecentOrders(getRecentOrders(5));
-    setIsLoading(false);
-=======
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -71,7 +59,6 @@ export function RecentOrders() {
       }
     };
     loadOrders();
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
   }, []);
 
   return (
@@ -117,11 +104,7 @@ export function RecentOrders() {
                         </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-<<<<<<< HEAD
-                        {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}
-=======
                         {order.createdAt ? new Date(order.createdAt as any).toLocaleDateString() : 'N/A'}
->>>>>>> bfa73560c963825c1b4db1797da8f2ef50b4bb74
                     </TableCell>
                     <TableCell className="text-right">₹{order.total.toFixed(2)}</TableCell>
                 </TableRow>
