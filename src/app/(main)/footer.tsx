@@ -52,15 +52,6 @@ export default function Footer() {
                   </ul>
               </div>
               <div>
-                  <h4 className="font-semibold mb-4">My Account</h4>
-                  <ul className="space-y-3">
-                      <FooterLink href="/cart">Cart</FooterLink>
-                      <FooterLink href="/checkout">Checkout</FooterLink>
-                      <FooterLink href="/admin">My Account</FooterLink>
-                      <FooterLink href="#">Payment Options</FooterLink>
-                  </ul>
-              </div>
-              <div>
                   <h4 className="font-semibold mb-4">Policies</h4>
                   <ul className="space-y-3">
                       <FooterLink href="/privacy-policy">Privacy Policy</FooterLink>
