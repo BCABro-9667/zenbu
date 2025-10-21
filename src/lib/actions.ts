@@ -21,6 +21,7 @@ export type OrderState = {
     address?: string[];
   };
   message?: string | null;
+  orderId?: string | null;
 };
 
 export async function placeOrder(
@@ -28,7 +29,7 @@ export async function placeOrder(
   total: number, 
   prevState: OrderState, 
   formData: FormData
-) {
+): Promise<OrderState> {
   const validatedFields = OrderFormSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -52,24 +53,21 @@ export async function placeOrder(
   const { name, email, phone, address } = validatedFields.data;
 
   try {
-    // This will now write to localStorage
-    addOrder({
+    const orderId = addOrder({
       items: cartItems,
       customer: { name, email, phone, address },
       total,
       status: 'Pending',
     });
+    
+    revalidatePath('/admin/orders');
+    return { message: 'success', orderId };
   } catch (error) {
     console.error(error);
     return {
       message: 'Storage Error: Failed to Place Order.',
     };
   }
-  
-  // Revalidation might not be strictly necessary for client-side localStorage,
-  // but it's good practice if you ever switch back to a server-based data source.
-  revalidatePath('/admin/orders');
-  return { message: 'success' };
 }
 
 

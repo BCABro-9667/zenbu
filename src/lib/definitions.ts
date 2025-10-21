@@ -54,6 +54,17 @@ export type Order = {
   status: OrderStatus;
 };
 
+export type OrderState = {
+  errors?: {
+    name?: string[];
+    email?: string[];
+    phone?: string[];
+    address?: string[];
+  };
+  message?: string | null;
+  orderId?: string | null;
+};
+
 export type Lead = {
     id: string;
     name: string;
@@ -62,5 +73,3 @@ export type Lead = {
     message: string;
     dateCreated: Date;
 }
-
-    
