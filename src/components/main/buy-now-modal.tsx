@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useActionState, useState } from 'react';
@@ -72,7 +73,7 @@ export function BuyNowModal({ product, isOpen, onClose }: BuyNowModalProps) {
           </DialogDescription>
         </DialogHeader>
         <form action={dispatch}>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4 px-2.5">
             <div className="flex items-center gap-4">
                 <div className="relative h-24 w-24 flex-shrink-0">
                     <Image src={product.imageUrl} alt={product.name} fill className="rounded-md object-cover" />
