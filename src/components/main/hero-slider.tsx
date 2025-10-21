@@ -9,12 +9,12 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import { getHeroSliderImages } from '@/lib/data';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 
 export default function HeroSlider() {
-  const heroImages = getHeroSliderImages();
+  const heroImages = PlaceHolderImages.filter(image => image.id.startsWith('hero-'));
 
   return (
     <section className="w-full">
@@ -46,8 +46,8 @@ export default function HeroSlider() {
                   <p className="mt-4 max-w-2xl text-lg text-neutral-200">
                     High-quality, stylish furniture to transform your space into a sanctuary of comfort and elegance.
                   </p>
-                  <Button asChild size="lg" className="mt-8 bg-primary text-primary-foreground hover:bg-primary/90">
-                    <Link href="#products">Shop Now</Link>
+                  <Button asChild size="lg" className="mt-8">
+                    <Link href="/products">Shop Now</Link>
                   </Button>
                 </div>
               </div>

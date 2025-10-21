@@ -1,3 +1,5 @@
+'use client';
+import { useMemo } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -17,8 +19,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getOrders } from "@/lib/data";
 import type { Order } from "@/lib/definitions";
+import { useCollection } from "@/firebase/firestore/use-collection";
+import { useFirestore } from "@/firebase";
+import { collection, query, orderBy, limit } from "firebase/firestore";
 
 const getStatusVariant = (status: Order['status']): "destructive" | "success" | "secondary" | "default" => {
     switch (status) {
@@ -34,7 +38,9 @@ const getStatusVariant = (status: Order['status']): "destructive" | "success" | 
 };
 
 export function RecentOrders() {
-  const recentOrders = getOrders().slice(0, 5);
+  const firestore = useFirestore();
+  const recentOrdersQuery = useMemo(() => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc'), limit(5)), [firestore]);
+  const { data: recentOrders, isLoading } = useCollection<Order>(recentOrdersQuery);
 
   return (
     <Card>
@@ -63,7 +69,9 @@ export function RecentOrders() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentOrders.length > 0 ? recentOrders.map(order => (
+            {isLoading ? (
+                <TableRow><TableCell colSpan={4} className="h-24 text-center">Loading recent orders...</TableCell></TableRow>
+            ) : recentOrders && recentOrders.length > 0 ? recentOrders.map(order => (
                 <TableRow key={order.id}>
                     <TableCell>
                         <div className="font-medium">{order.customer.name}</div>
@@ -77,7 +85,7 @@ export function RecentOrders() {
                         </Badge>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                        {new Date(order.createdAt).toLocaleDateString()}
+                        {order.createdAt ? new Date(order.createdAt.toDate()).toLocaleDateString() : 'N/A'}
                     </TableCell>
                     <TableCell className="text-right">₹{order.total.toFixed(2)}</TableCell>
                 </TableRow>

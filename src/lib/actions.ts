@@ -1,9 +1,8 @@
-
 'use server';
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { addOrder } from './data';
+import { addLead, addOrder } from './data';
 import type { CartItem } from './definitions';
 
 const OrderFormSchema = z.object({
@@ -52,12 +51,14 @@ export async function placeOrder(
   const { name, email, phone, address } = validatedFields.data;
 
   try {
-    addOrder({
+    await addOrder({
       items: cartItems,
       customer: { name, email, phone, address },
       total,
+      status: 'Pending',
     });
   } catch (error) {
+    console.error(error);
     return {
       message: 'Database Error: Failed to Place Order.',
     };
@@ -89,7 +90,7 @@ export async function submitContactForm(prevState: ContactState | null, formData
   const validatedFields = ContactFormSchema.safeParse({
     name: formData.get('name'),
     phone: formData.get('phone'),
-    email: formData.get('email'),
+    email: formData.get('email') || '',
     message: formData.get('message'),
   });
 
@@ -100,9 +101,15 @@ export async function submitContactForm(prevState: ContactState | null, formData
     }
   }
 
-  // Here you would typically send an email or save to a database.
-  // For this example, we'll just log it to the console.
-  console.log("New contact form submission:", validatedFields.data);
+  try {
+    await addLead(validatedFields.data);
+  } catch (error) {
+    console.error(error);
+    return {
+      message: 'Database Error: Failed to Submit Message.',
+    };
+  }
 
+  revalidatePath('/admin/leads'); // Assuming you'll have a leads page
   return { message: 'success' };
 }

@@ -1,10 +1,14 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { getBannerImage } from '@/lib/data';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function BigBanner() {
-  const bannerImage = getBannerImage();
+  const bannerImage = PlaceHolderImages.find(img => img.id === 'banner-1');
+
+  if (!bannerImage) {
+    return null; // Or a fallback
+  }
 
   return (
     <section className="container">
@@ -23,7 +27,7 @@ export default function BigBanner() {
             Every piece is crafted with the highest quality materials to bring lasting style and comfort to your home. Explore our new collection today.
           </p>
           <Button asChild size="lg" className="mt-8 bg-white text-black hover:bg-neutral-200">
-            <Link href="#products">Explore Collection</Link>
+            <Link href="/products">Explore Collection</Link>
           </Button>
         </div>
       </div>

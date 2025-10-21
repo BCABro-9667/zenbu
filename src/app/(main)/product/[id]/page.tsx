@@ -1,31 +1,72 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { getProductById, getProducts, getCategoryByName } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/context/cart-context';
 import { BuyNowModal } from '@/components/main/buy-now-modal';
 import ProductCard from '@/components/main/product-card';
 import { ShoppingCart, Zap, Star, Video, FileText } from 'lucide-react';
-import type { Product } from '@/lib/definitions';
+import type { Product, Category } from '@/lib/definitions';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Breadcrumb } from '@/components/main/breadcrumb';
+import { useDoc } from '@/firebase/firestore/use-doc';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { doc, collection, query, where } from 'firebase/firestore';
+import { useFirestore, useMemoFirebase } from '@/firebase';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addToCart } = useCart();
+  const firestore = useFirestore();
+
+  const productRef = useMemoFirebase(() => doc(firestore, 'products', params.id), [firestore, params.id]);
+  const { data: product, isLoading: isProductLoading } = useDoc<Product>(productRef);
   
-  const product = getProductById(params.id);
-  
+  const relatedProductsQuery = useMemoFirebase(() => product ? query(collection(firestore, 'products'), where('category', '==', product.category), where('__name__', '!=', product.id)) : null, [firestore, product]);
+  const { data: relatedProducts, isLoading: areRelatedLoading } = useCollection<Product>(relatedProductsQuery);
+
+  const categoryQuery = useMemoFirebase(() => product ? query(collection(firestore, 'categories'), where('name', '==', product.category)) : null, [firestore, product]);
+  const { data: categoryData } = useCollection<Category>(categoryQuery);
+  const category = useMemo(() => categoryData?.[0], [categoryData]);
+
+  const [mainImage, setMainImage] = useState<string | undefined>(undefined);
+
+  if (isProductLoading) {
+    return (
+      <div className="container py-8">
+        <Skeleton className="h-6 w-1/2 mb-6" />
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div className="grid grid-cols-5 gap-4">
+                <div className="col-span-1 flex flex-col gap-2">
+                    {[...Array(4)].map((_, i) => <Skeleton key={i} className="aspect-square rounded-md" />)}
+                </div>
+                <div className="col-span-4">
+                    <Skeleton className="aspect-square w-full" />
+                </div>
+            </div>
+            <div className="space-y-6">
+                <Skeleton className="h-12 w-3/4" />
+                <Skeleton className="h-6 w-1/4" />
+                <Skeleton className="h-10 w-1/3" />
+                <Skeleton className="h-20 w-full" />
+                <div className="flex gap-4">
+                    <Skeleton className="h-12 w-36" />
+                    <Skeleton className="h-12 w-36" />
+                </div>
+            </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
     notFound();
   }
-
-  const category = getCategoryByName(product.category);
 
   const breadcrumbItems = [
     { label: 'Home', href: '/' },
@@ -33,10 +74,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     { label: product.name },
   ];
 
-  const [mainImage, setMainImage] = useState(product.imageUrl);
-
-  const relatedProducts = getProducts().filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
-  const galleryImages = [product.imageUrl, ...product.galleryImageUrls];
+  const currentMainImage = mainImage || product.imageUrl;
+  const galleryImages = [product.imageUrl, ...(product.galleryImageUrls || [])];
 
   return (
     <>
@@ -50,7 +89,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   key={index}
                   className={cn(
                     "relative aspect-square rounded-md cursor-pointer border-2",
-                    mainImage === img ? "border-primary" : "border-transparent"
+                    currentMainImage === img ? "border-primary" : "border-transparent"
                   )}
                   onClick={() => setMainImage(img)}
                 >
@@ -68,7 +107,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 <CardContent className="p-4">
                     <div className="relative aspect-square w-full">
                     <Image
-                        src={mainImage}
+                        src={currentMainImage}
                         alt={product.name}
                         fill
                         className="object-cover rounded-lg"
@@ -138,7 +177,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      {relatedProducts.length > 0 && (
+      {!areRelatedLoading && relatedProducts && relatedProducts.length > 0 && (
         <div className="py-16">
           <div className="container">
             <h2 className="text-3xl font-bold tracking-tight text-center mb-10">Related Products</h2>

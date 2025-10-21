@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -35,13 +35,18 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getProducts } from "@/lib/data";
 import { deleteProductAction } from "@/lib/admin-actions";
 import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@/lib/definitions";
+import { useCollection } from "@/firebase/firestore/use-collection";
+import { useFirestore } from "@/firebase";
+import { collection } from "firebase/firestore";
 
 export default function ProductsPage() {
-    const products = getProducts();
+    const firestore = useFirestore();
+    const productsCollection = useMemo(() => collection(firestore, 'products'), [firestore]);
+    const { data: products, isLoading } = useCollection<Product>(productsCollection);
+    
     const [isPending, startTransition] = useTransition();
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [productToDelete, setProductToDelete] = useState<Product | null>(null);
@@ -98,7 +103,11 @@ export default function ProductsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {products.map(product => (
+                        {isLoading ? (
+                            <TableRow>
+                                <TableCell colSpan={6} className="h-24 text-center">Loading products...</TableCell>
+                            </TableRow>
+                        ) : products?.map(product => (
                         <TableRow key={product.id}>
                             <TableCell className="hidden sm:table-cell">
                                 <div className="relative aspect-square h-16 w-16 rounded-md">

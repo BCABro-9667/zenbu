@@ -7,6 +7,8 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import type { Order } from './definitions';
+import { setDoc, doc } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 
 // AI Actions
 export async function generateDescriptionAction(prevState: any, formData: FormData) {
@@ -92,16 +94,17 @@ export async function addProductAction(prevState: any, formData: FormData) {
     try {
         const galleryUrls = validatedFields.data.galleryImageUrls?.split(',').map(url => url.trim()).filter(url => url) || [];
         
-        addProduct({
+        await addProduct({
             ...validatedFields.data,
-            galleryImageUrls: galleryUrls,
             longDescription: 'This is a default long description. Please edit it in the product management section.',
+            galleryImageUrls: galleryUrls,
             isTopRated: false,
             isTopSale: false,
             isRecent: true,
             imageHint: validatedFields.data.name.toLowerCase().split(' ').slice(0,2).join(' ')
         });
     } catch (e) {
+        console.error(e);
         return { message: 'Database error: Failed to add product.' };
     }
 
@@ -121,10 +124,11 @@ export async function addCategoryAction(prevState: any, formData: FormData) {
     }
 
     try {
-        addCategory({ name: validatedFields.data.name });
+        await addCategory({ name: validatedFields.data.name });
         revalidatePath('/admin/categories');
         return { message: 'success' };
     } catch (e) {
+        console.error(e);
         return { message: 'Database error: Failed to add category.' };
     }
 }
@@ -141,7 +145,7 @@ export async function updateCategoryAction(prevState: any, formData: FormData) {
     }
 
     try {
-        updateCategory(validatedFields.data.id, { name: validatedFields.data.name });
+        await updateCategory(validatedFields.data.id, { name: validatedFields.data.name });
         revalidatePath('/admin/categories');
         revalidatePath('/category/[slug]', 'layout');
         return { message: 'success' };
@@ -153,29 +157,32 @@ export async function updateCategoryAction(prevState: any, formData: FormData) {
 
 export async function deleteProductAction(id: string) {
     try {
-        deleteProduct(id);
+        await deleteProduct(id);
         revalidatePath('/admin/products');
     } catch (e) {
+        console.error(e);
         return { message: 'Database error: Failed to delete product.' };
     }
 }
 
 export async function deleteCategoryAction(id: string) {
     try {
-        deleteCategory(id);
+        await deleteCategory(id);
         revalidatePath('/admin/categories');
     } catch (e) {
+        console.error(e);
         return { message: 'Database error: Failed to delete category.' };
     }
 }
 
 export async function updateOrderStatusAction(orderId: string, status: Order['status']) {
     try {
-        updateOrderStatus(orderId, status);
+        await updateOrderStatus(orderId, status);
         revalidatePath('/admin/orders');
         revalidatePath(`/admin/orders/${orderId}`);
         return { message: 'success' };
     } catch (e) {
+        console.error(e);
         return { message: 'Database error: Failed to update order status.' };
     }
 }

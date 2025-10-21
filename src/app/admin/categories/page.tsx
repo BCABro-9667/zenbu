@@ -6,16 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import { getCategories } from "@/lib/data";
 import { Edit, Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useFormStatus } from 'react-dom';
 import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction, updateCategoryAction } from "@/lib/admin-actions";
-import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import type { Category } from "@/lib/definitions";
+import { useCollection } from "@/firebase/firestore/use-collection";
+import { useFirestore } from "@/firebase";
+import { collection } from "firebase/firestore";
 
 function AddCategoryForm() {
     const [state, formAction] = useActionState(addCategoryAction, { message: null });
@@ -47,6 +49,7 @@ function AddCategoryForm() {
 function EditCategoryDialog({ category, onOpenChange, open }: { category: Category; open: boolean; onOpenChange: (open: boolean) => void; }) {
     const { toast } = useToast();
     const [state, formAction] = useActionState(updateCategoryAction, { message: null });
+     const { pending } = useFormStatus();
 
     useEffect(() => {
         if (state.message === 'success') {
@@ -70,11 +73,14 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
                     <input type="hidden" name="id" value={category.id} />
                     <div className="space-y-2">
                         <Label htmlFor="edit-cat-name">Category Name</Label>
-                        <Input id="edit-cat-name" name="name" defaultValue={category.name} />
+                        <Input id="edit-cat-name" name="name" defaultValue={category.name} disabled={pending}/>
                     </div>
                     <DialogFooter>
-                        <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-                        <Button type="submit">Save Changes</Button>
+                        <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} disabled={pending}>Cancel</Button>
+                        <Button type="submit" disabled={pending}>
+                             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Save Changes
+                        </Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
@@ -83,7 +89,10 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
 }
 
 export default function CategoriesPage() {
-    const categories = getCategories();
+    const firestore = useFirestore();
+    const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+    const { data: categories, isLoading } = useCollection<Category>(categoriesCollection);
+
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
     
@@ -142,7 +151,9 @@ export default function CategoriesPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {categories.map(cat => (
+                                {isLoading ? (
+                                    <TableRow><TableCell colSpan={3} className="text-center h-24">Loading categories...</TableCell></TableRow>
+                                ) : categories?.map(cat => (
                                     <TableRow key={cat.id}>
                                         <TableCell className="font-medium">{cat.name}</TableCell>
                                         <TableCell>{cat.slug}</TableCell>

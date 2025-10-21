@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { getCategories } from '@/lib/data';
 import {
   Carousel,
   CarouselContent,
@@ -10,9 +9,37 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { useFirestore } from '@/firebase';
+import { collection } from 'firebase/firestore';
+import { useMemo } from 'react';
+import type { Category } from '@/lib/definitions';
+import { Skeleton } from '../ui/skeleton';
 
 export default function CategoryCircles() {
-  const categories = getCategories();
+  const firestore = useFirestore();
+  const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+  const { data: categories, isLoading } = useCollection<Category>(categoriesCollection);
+
+  if (isLoading) {
+    return (
+        <section id="categories" className="container py-12">
+            <h2 className="text-3xl font-bold tracking-tight text-center mb-10">Shop by Category</h2>
+            <div className="flex justify-center gap-8">
+                {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex flex-col items-center gap-3">
+                        <Skeleton className="h-32 w-32 md:h-40 md:w-40 rounded-full" />
+                        <Skeleton className="h-6 w-24" />
+                    </div>
+                ))}
+            </div>
+        </section>
+    )
+  }
+
+  if (!categories || categories.length === 0) {
+    return null;
+  }
 
   return (
     <section id="categories" className="container py-12">

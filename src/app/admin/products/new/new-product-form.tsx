@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useFormStatus } from 'react-dom';
-import { useActionState, useEffect, useState, useTransition } from 'react';
+import { useActionState, useEffect, useMemo, useState, useTransition } from 'react';
 
 import { addProductAction, generateDescriptionAction } from '@/lib/admin-actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,9 @@ import { Loader2, Wand2 } from "lucide-react";
 import type { Category } from '@/lib/definitions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useCollection } from '@/firebase/firestore/use-collection';
+import { collection } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -32,7 +35,11 @@ const productSchema = z.object({
 
 type ProductFormData = z.infer<typeof productSchema>;
 
-export default function NewProductForm({ categories }: { categories: Category[] }) {
+export default function NewProductForm() {
+    const firestore = useFirestore();
+    const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+    const { data: categories, isLoading: areCategoriesLoading } = useCollection<Category>(categoriesCollection);
+    
     const { toast } = useToast();
     const [isGenerating, startDescriptionGeneration] = useTransition();
 
@@ -75,7 +82,7 @@ export default function NewProductForm({ categories }: { categories: Category[] 
     const SubmitButton = () => {
         const { pending } = useFormStatus();
         return (
-            <Button type="submit" size="lg" className="w-full" disabled={pending}>
+            <Button type="submit" size="lg" className="w-full" disabled={pending || areCategoriesLoading}>
                 {pending ? <Loader2 className="animate-spin" /> : "Save Product"}
             </Button>
         );
@@ -143,12 +150,12 @@ export default function NewProductForm({ categories }: { categories: Category[] 
                                 name="category"
                                 control={control}
                                 render={({ field }) => (
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={areCategoriesLoading}>
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Select a category" />
+                                            <SelectValue placeholder={areCategoriesLoading ? "Loading..." : "Select a category"} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {categories.map(cat => (
+                                            {categories?.map(cat => (
                                                 <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
                                             ))}
                                         </SelectContent>

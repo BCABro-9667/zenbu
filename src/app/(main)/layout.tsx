@@ -9,13 +9,13 @@ export default function MainLayout({
 }) {
   return (
     <FirebaseClientProvider>
-        <div className="flex min-h-screen flex-col bg-background">
+      <div className="flex min-h-screen flex-col bg-background">
         <Navbar />
         <main className="flex-1">
-            <div className="px-[5%]">{children}</div>
+          <div className="px-[5%]">{children}</div>
         </main>
         <Footer />
-        </div>
+      </div>
     </FirebaseClientProvider>
   );
 }
