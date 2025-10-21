@@ -1,5 +1,6 @@
-import Footer from './footer';
-import Navbar from './navbar';
+import Footer from '@/components/main/footer';
+import Navbar from '@/components/main/navbar';
+import { TopBar } from '@/components/main/top-bar';
 
 export default function MainLayout({
   children,
@@ -8,6 +9,7 @@ export default function MainLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <TopBar />
       <Navbar />
       <main className="flex-1">
         <div className="px-[5%]">{children}</div>
