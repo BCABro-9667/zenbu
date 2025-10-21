@@ -10,15 +10,14 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useMemoFirebase } from '@/firebase';
 import { collection } from 'firebase/firestore';
-import { useMemo } from 'react';
 import type { Category } from '@/lib/definitions';
 import { Skeleton } from '../ui/skeleton';
 
 export default function CategoryCircles() {
   const firestore = useFirestore();
-  const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+  const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
   const { data: categories, isLoading } = useCollection<Category>(categoriesCollection);
 
   if (isLoading) {
