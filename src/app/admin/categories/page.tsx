@@ -1,4 +1,3 @@
-
 'use client';
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
@@ -35,9 +34,19 @@ function AddCategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void }) {
     }, [state, toast, onCategoryAdded]);
 
     return (
-        <form action={formAction} ref={formRef} className="space-y-2">
-            <Label htmlFor="cat-name">Category Name</Label>
-            <Input id="cat-name" name="name" placeholder="e.g. Home Office" disabled={pending} />
+        <form action={formAction} ref={formRef} className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="cat-name">Category Name</Label>
+                <Input id="cat-name" name="name" placeholder="e.g. Home Office" disabled={pending} />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="cat-slug">Slug</Label>
+                <Input id="cat-slug" name="slug" placeholder="e.g. home-office" disabled={pending} />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="cat-imageUrl">Image URL</Label>
+                <Input id="cat-imageUrl" name="imageUrl" placeholder="https://example.com/image.png" disabled={pending} />
+            </div>
             <Button type="submit" className="w-full" disabled={pending}>
                 {pending ? <Loader2 className="animate-spin" /> : <PlusCircle />}
                 Add Category

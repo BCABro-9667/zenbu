@@ -1,4 +1,3 @@
-
 'use server';
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
@@ -114,17 +113,28 @@ export async function addProductAction(prevState: any, formData: any) {
 
 const categorySchema = z.object({
     name: z.string().min(1, 'Category name cannot be empty.'),
+    slug: z.string().min(1, 'Slug cannot be empty.'),
+    imageUrl: z.string().url('Please enter a valid image URL'),
 });
 
 export async function addCategoryAction(prevState: any, formData: FormData) {
-    const validatedFields = categorySchema.safeParse({ name: formData.get('name') });
+    const validatedFields = categorySchema.safeParse({ 
+        name: formData.get('name'),
+        slug: formData.get('slug'),
+        imageUrl: formData.get('imageUrl'),
+     });
 
     if (!validatedFields.success) {
-        return { message: validatedFields.error.flatten().fieldErrors.name?.[0] };
+        const firstError = Object.values(validatedFields.error.flatten().fieldErrors)[0]?.[0];
+        return { message: firstError || 'Invalid data provided.' };
     }
 
     try {
-        addCategory({ name: validatedFields.data.name });
+        addCategory({ 
+            name: validatedFields.data.name,
+            slug: validatedFields.data.slug,
+            imageUrl: validatedFields.data.imageUrl,
+        });
         revalidatePath('/admin/categories');
         return { message: 'success' };
     } catch (e) {

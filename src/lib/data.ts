@@ -1,4 +1,3 @@
-
 'use client';
 
 import { PlaceHolderImages } from './placeholder-images';
@@ -104,15 +103,12 @@ export function getCategoryBySlug(slug: string) {
     return categories.find(c => c.slug === slug);
 }
 
-export function addCategory(categoryData: Omit<Category, 'id' | 'slug' | 'imageUrl' | 'imageHint'>) {
+export function addCategory(categoryData: Omit<Category, 'id' | 'imageHint'>) {
     const categories = getCategories();
     const newId = (Math.max(0, ...categories.map(c => parseInt(c.id, 10))) + 1).toString();
-    const slug = categoryData.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
     const newCategory: Category = {
         ...categoryData,
         id: newId,
-        slug,
-        imageUrl: `https://picsum.photos/seed/${slug}/400/400`,
         imageHint: categoryData.name.toLowerCase()
     };
     saveToLocalStorage('categories', [...categories, newCategory]);
