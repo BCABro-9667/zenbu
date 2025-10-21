@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Logo } from './logo';
+import { Logo } from '@/components/main/logo';
 import { Button } from '@/components/ui/button';
 import { Facebook, Twitter, Linkedin, Instagram, Youtube, Headphones, MoveUp } from 'lucide-react';
 import Link from 'next/link';
