@@ -110,7 +110,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             </div>
             <div className="col-span-4">
                 <Card>
-                <CardContent className="p-4">
+                <CardContent className="p-0">
                     <div className="relative aspect-square w-full">
                     <Image
                         src={currentMainImage}
