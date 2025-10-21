@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12 pb-20">
-      <div className="-mb-12">
+      <div className="-mb-12 mt-[10px]">
         <HeroSlider />
       </div>
       <CategoryCircles />
