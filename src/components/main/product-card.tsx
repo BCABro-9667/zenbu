@@ -33,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <>
       <Card className="w-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col group">
-        <Link href={`/product/${product.id}`}>
+        <Link href={`/product/${product.id}`} className="flex flex-col flex-grow">
           <CardHeader className="p-0">
             <div className="relative h-64 w-full">
               <Image
@@ -45,8 +45,8 @@ export default function ProductCard({ product }: ProductCardProps) {
               />
             </div>
           </CardHeader>
-          <CardContent className="p-4 flex-grow">
-            <CardTitle className="text-lg font-semibold leading-tight mb-2 h-14">{product.name}</CardTitle>
+          <CardContent className="p-4 flex flex-col flex-grow">
+            <CardTitle className="text-lg font-semibold leading-tight mb-2 min-h-[2.5rem]">{product.name}</CardTitle>
             <p className="text-xl font-bold text-foreground mt-auto">₹{product.price.toFixed(2)}</p>
           </CardContent>
         </Link>
