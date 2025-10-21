@@ -2,13 +2,11 @@
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
 import { suggestCategories } from '@/ai/flows/category-suggestion-generator';
-import { addProduct, addCategory, deleteCategory, deleteProduct, updateCategory, updateOrderStatus } from '@/lib/data';
+import { createProduct, createCategory, deleteCategory, deleteProduct, updateCategory, updateOrderStatus } from '@/lib/mongodb-data';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import type { Order } from './definitions';
-import { setDoc, doc } from 'firebase/firestore';
-import { db } from '@/firebase/config';
 
 // AI Actions
 export async function generateDescriptionAction(prevState: any, formData: FormData) {
@@ -94,7 +92,7 @@ export async function addProductAction(prevState: any, formData: FormData) {
     try {
         const galleryUrls = validatedFields.data.galleryImageUrls?.split(',').map(url => url.trim()).filter(url => url) || [];
         
-        await addProduct({
+        await createProduct({
             ...validatedFields.data,
             longDescription: 'This is a default long description. Please edit it in the product management section.',
             galleryImageUrls: galleryUrls,
@@ -124,7 +122,7 @@ export async function addCategoryAction(prevState: any, formData: FormData) {
     }
 
     try {
-        await addCategory({ name: validatedFields.data.name });
+        await createCategory({ name: validatedFields.data.name });
         revalidatePath('/admin/categories');
         return { message: 'success' };
     } catch (e) {

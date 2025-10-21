@@ -14,10 +14,7 @@ import { useActionState, useEffect, useRef, useState, useTransition } from "reac
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import type { Category } from "@/lib/definitions";
-import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore, useMemoFirebase } from "@/firebase";
-import { collection } from "firebase/firestore";
+import { getCategories } from "@/lib/mongodb-data";
 
 function AddCategoryForm() {
     const [state, formAction] = useActionState(addCategoryAction, { message: null });
@@ -89,9 +86,23 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
 }
 
 export default function CategoriesPage() {
-    const firestore = useFirestore();
-    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
-    const { data: categories, isLoading } = useCollection<Category>(categoriesCollection);
+    const [categories, setCategories] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const data = await getCategories();
+                setCategories(data || []);
+            } catch (e) {
+                console.error('Failed to load categories:', e);
+                setCategories([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadCategories();
+    }, []);
 
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();

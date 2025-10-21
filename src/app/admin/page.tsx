@@ -3,29 +3,41 @@ import { PageHeader } from "@/components/admin/page-header";
 import { RecentOrders } from "@/components/admin/recent-orders";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingCart, Tag } from "lucide-react";
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirestore, useMemoFirebase } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { getProducts, getCategories, getOrders } from '@/lib/mongodb-data';
 import type { Product, Category, Order } from '@/lib/definitions';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 export default function AdminDashboard() {
-    const firestore = useFirestore();
-    
-    const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
-    const { data: products, isLoading: productsLoading } = useCollection<Product>(productsCollection);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
-    const { data: categories, isLoading: categoriesLoading } = useCollection<Category>(categoriesCollection);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [productsData, categoriesData, ordersData] = await Promise.all([
+                    getProducts(),
+                    getCategories(),
+                    getOrders()
+                ]);
+                
+                setProducts(productsData);
+                setCategories(categoriesData);
+                setOrders(ordersData);
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    const ordersCollection = useMemoFirebase(() => collection(firestore, 'orders'), [firestore]);
-    const { data: orders, isLoading: ordersLoading } = useCollection<Order>(ordersCollection);
+        fetchData();
+    }, []);
 
     const totalRevenue = useMemo(() => orders?.reduce((sum, order) => sum + order.total, 0) || 0, [orders]);
     const pendingOrders = useMemo(() => orders?.filter(o => o.status === 'Pending').length || 0, [orders]);
-    
-    const isLoading = productsLoading || categoriesLoading || ordersLoading;
 
     return (
         <div>

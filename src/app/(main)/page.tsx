@@ -4,16 +4,28 @@ import HeroSlider from '@/components/main/hero-slider';
 import CategoryCircles from '@/components/main/category-circles';
 import ProductSection from '@/components/main/product-section';
 import BigBanner from '@/components/main/big-banner';
-import { useMemo } from 'react';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection } from 'firebase/firestore';
-import { useFirestore, useMemoFirebase } from '@/firebase';
+import { useMemo, useState, useEffect } from 'react';
+import { getProducts } from '@/lib/mongodb-data';
 import type { Product } from '@/lib/definitions';
 
 export default function HomePage() {
-  const firestore = useFirestore();
-  const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
-  const { data: allProducts, isLoading } = useCollection<Product>(productsCollection);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await getProducts();
+        setAllProducts(products);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const topRatedProducts = useMemo(() => allProducts?.filter(p => p.isTopRated).slice(0, 4) || [], [allProducts]);
   const topSaleProducts = useMemo(() => allProducts?.filter(p => p.isTopSale).slice(0, 4) || [], [allProducts]);

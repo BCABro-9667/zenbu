@@ -5,14 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('info@zenbu.com');
-  const [password, setPassword] = useState('Kamalpuri@Zenbu123');
+  const [password, setPassword] = useState('Zenbu#kamalpuri@123');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const auth = useAuth();
@@ -20,22 +19,13 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    try {
-      // First, try to sign in.
-      await signInWithEmailAndPassword(auth, email, password);
+    
+    const success = await auth.login(email, password);
+    
+    if (success) {
       router.push('/admin');
-    } catch (error: any) {
-      // If sign-in fails because the user is not found, create a new user account.
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          router.push('/admin');
-        } catch (createError: any) {
-          setError(createError.message);
-        }
-      } else {
-        setError(error.message);
-      }
+    } else {
+      setError('Invalid credentials. Please try again.');
     }
   };
 

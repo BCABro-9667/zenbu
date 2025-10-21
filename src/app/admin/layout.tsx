@@ -1,22 +1,22 @@
 'use client';
 
 import AdminSidebar from "@/components/admin/admin-sidebar";
-import { FirebaseClientProvider, useUser } from "@/firebase";
+import { useAuth } from "@/context/auth-context";
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 
 function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
-    const { user, isUserLoading } = useUser();
+    const { user, isLoading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (!isUserLoading && !user) {
+        if (!isLoading && !user) {
             router.push('/login');
         }
-    }, [user, isUserLoading, router]);
+    }, [user, isLoading, router]);
 
-    if (isUserLoading || !user) {
+    if (isLoading || !user) {
         return (
             <div className="flex min-h-screen items-center justify-center">
                 <p>Loading...</p>
@@ -41,10 +41,8 @@ export default function AdminLayout({
     children: React.ReactNode;
 }) {
     return (
-        <FirebaseClientProvider>
-            <ProtectedAdminLayout>
-                {children}
-            </ProtectedAdminLayout>
-        </FirebaseClientProvider>
+        <ProtectedAdminLayout>
+            {children}
+        </ProtectedAdminLayout>
     );
 }
