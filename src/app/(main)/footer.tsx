@@ -3,7 +3,7 @@
 
 import { Logo } from '@/components/main/logo';
 import { Button } from '@/components/ui/button';
-import { Facebook, Twitter, Linkedin, Instagram, Youtube, Headphones, MoveUp } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Instagram, Youtube, Headphones, MoveUp, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -77,6 +77,12 @@ export default function Footer() {
         </div>
       </div>
       <div className="fixed bottom-4 right-4 flex flex-col items-center gap-4">
+         <Button asChild size="icon" className="rounded-full h-14 w-14 shadow-lg bg-green-500 hover:bg-green-600">
+          <Link href="https://api.whatsapp.com/send/?phone=919910091835&text=Hi+Estovir+Team%2C%0AI+am+interested+in+the+ESD+Apron+%E2%80%93+Blue%2C+White+%26+Green+%7C+Anti-Static+Polyester+Conductive+Fiber+Apron+%28All+Sizes+%7C+5mm+Grid%29.+Please+share+more+details.&type=phone_number&app_absent=0" target="_blank">
+            <MessageCircle className="h-7 w-7 text-white" />
+            <span className="sr-only">Chat on WhatsApp</span>
+          </Link>
+        </Button>
         <Button variant="secondary" size="icon" className="rounded-full h-12 w-12 shadow-lg" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <MoveUp className="h-6 w-6"/>
             <span className="sr-only">Scroll to top</span>
