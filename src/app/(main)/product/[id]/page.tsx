@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -20,9 +21,18 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addToCart } = useCart();
   
-  const product = useMemo(() => getProductById(params.id), [params.id]);
-  const allProducts = useMemo(() => getProducts(), []);
-  const allCategories = useMemo(() => getCategories(), []);
+  const [product, setProduct] = useState<Product | undefined>();
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setProduct(getProductById(params.id));
+    setAllProducts(getProducts());
+    setAllCategories(getCategories());
+    setIsLoading(false);
+  }, [params.id]);
+
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
@@ -35,9 +45,33 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }, [product, allCategories]);
 
   const [mainImage, setMainImage] = useState<string | undefined>(undefined);
+  
+  useEffect(() => {
+    if (!isLoading && !product) {
+      notFound();
+    }
+  }, [isLoading, product]);
 
-  if (!product) {
-    notFound();
+
+  if (isLoading || !product) {
+      return (
+          <div className="container py-8">
+              <Skeleton className="h-8 w-1/2 mb-6" />
+              <div className="grid md:grid-cols-2 gap-12 items-start">
+                  <Skeleton className="h-[500px] w-full" />
+                  <div className="space-y-6">
+                      <Skeleton className="h-10 w-3/4" />
+                      <Skeleton className="h-6 w-1/4" />
+                      <Skeleton className="h-12 w-1/3" />
+                      <Skeleton className="h-24 w-full" />
+                      <div className="flex gap-4">
+                          <Skeleton className="h-12 w-36" />
+                          <Skeleton className="h-12 w-36" />
+                      </div>
+                  </div>
+              </div>
+          </div>
+      )
   }
 
   const breadcrumbItems = [

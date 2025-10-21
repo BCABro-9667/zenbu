@@ -1,7 +1,8 @@
+
 'use client';
 
 import { notFound } from 'next/navigation';
-import { useMemo, useTransition } from 'react';
+import { useMemo, useTransition, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import {
   MoreVertical,
@@ -77,13 +78,30 @@ const getStatusIcon = (status: OrderStatus) => {
 };
 
 export default function OrderDetailsPage({ params }: { params: { id: string } }) {
-  const order = useMemo(() => getOrderById(params.id), [params.id]);
-
+  const [order, setOrder] = useState<Order | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  if (!order) {
-    notFound();
+  const refreshOrder = () => {
+      setIsLoading(true);
+      const fetchedOrder = getOrderById(params.id);
+      setOrder(fetchedOrder);
+      setIsLoading(false);
+  }
+
+  useEffect(() => {
+    refreshOrder();
+  }, [params.id]);
+
+  useEffect(() => {
+      if (!isLoading && !order) {
+          notFound();
+      }
+  }, [isLoading, order]);
+
+  if (isLoading || !order) {
+    return <div className="p-4 sm:px-6 sm:py-0">Loading order details...</div>;
   }
 
   const handlePrint = () => {
@@ -98,6 +116,7 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
           title: 'Status Updated',
           description: `Order status changed to ${newStatus}.`,
         });
+        refreshOrder();
       } else {
         toast({
           title: 'Error',

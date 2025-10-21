@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -12,10 +13,32 @@ import {
 import { getCategories } from '@/lib/data';
 import type { Category } from '@/lib/definitions';
 import { Skeleton } from '../ui/skeleton';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 export default function CategoryCircles() {
-  const categories = useMemo(() => getCategories(), []);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setCategories(getCategories());
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return (
+        <section id="categories" className="container py-12">
+            <h2 className="text-3xl font-bold tracking-tight text-center mb-10">Shop by Category</h2>
+            <div className="flex justify-center gap-8">
+                {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex flex-col items-center gap-3">
+                        <Skeleton className="h-40 w-40 rounded-full" />
+                        <Skeleton className="h-6 w-24" />
+                    </div>
+                ))}
+            </div>
+        </section>
+    )
+  }
 
   if (!categories || categories.length === 0) {
     return null;

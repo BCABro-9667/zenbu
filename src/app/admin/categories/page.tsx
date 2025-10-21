@@ -1,3 +1,4 @@
+
 'use client';
 import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
@@ -10,14 +11,14 @@ import { Edit, Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useFormStatus } from 'react-dom';
 import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction, updateCategoryAction } from "@/lib/admin-actions";
-import { useActionState, useEffect, useRef, useState, useTransition, useMemo } from "react";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { Category } from "@/lib/definitions";
 import { getCategories } from "@/lib/data";
 
-function AddCategoryForm() {
+function AddCategoryForm({ onCategoryAdded }: { onCategoryAdded: () => void }) {
     const [state, formAction] = useActionState(addCategoryAction, { message: null });
     const { pending } = useFormStatus();
     const { toast } = useToast();
@@ -27,10 +28,11 @@ function AddCategoryForm() {
         if (state.message === 'success') {
             toast({ title: 'Category added successfully!' });
             formRef.current?.reset();
+            onCategoryAdded();
         } else if (state.message) {
             toast({ title: 'Error', description: state.message, variant: 'destructive' });
         }
-    }, [state, toast]);
+    }, [state, toast, onCategoryAdded]);
 
     return (
         <form action={formAction} ref={formRef} className="space-y-2">
@@ -44,7 +46,7 @@ function AddCategoryForm() {
     )
 }
 
-function EditCategoryDialog({ category, onOpenChange, open }: { category: Category; open: boolean; onOpenChange: (open: boolean) => void; }) {
+function EditCategoryDialog({ category, onOpenChange, open, onCategoryUpdated }: { category: Category; open: boolean; onOpenChange: (open: boolean) => void; onCategoryUpdated: () => void; }) {
     const { toast } = useToast();
     const [state, formAction] = useActionState(updateCategoryAction, { message: null });
      const { pending } = useFormStatus();
@@ -52,11 +54,12 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
     useEffect(() => {
         if (state.message === 'success') {
             toast({ title: 'Category updated!' });
+            onCategoryUpdated();
             onOpenChange(false);
         } else if (state.message) {
             toast({ title: 'Error', description: state.message, variant: 'destructive' });
         }
-    }, [state, toast, onOpenChange]);
+    }, [state, toast, onOpenChange, onCategoryUpdated]);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -87,16 +90,27 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
 }
 
 export default function CategoriesPage() {
-    const categories = useMemo(() => getCategories(), []);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
-    
+
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [suggestionState, suggestionAction] = useActionState(suggestCategoriesAction, { message: null, suggestions: [] });
     const { pending: suggestionsPending } = useFormStatus();
     const suggestionFormRef = useRef<HTMLFormElement>(null);
 
     const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+
+    const refreshCategories = () => {
+        setIsLoading(true);
+        setCategories(getCategories());
+        setIsLoading(false);
+    };
+
+    useEffect(() => {
+        refreshCategories();
+    }, []);
 
     useEffect(() => {
         if (suggestionState.message === 'success') {
@@ -115,6 +129,7 @@ export default function CategoriesPage() {
                  toast({ title: 'Error', description: result.message, variant: 'destructive' });
             } else {
                  toast({ title: 'Category deleted' });
+                 refreshCategories();
             }
         });
     }
@@ -146,7 +161,9 @@ export default function CategoriesPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {categories?.map(cat => (
+                                {isLoading ? (
+                                    <TableRow><TableCell colSpan={3} className="text-center">Loading...</TableCell></TableRow>
+                                ) : categories?.map(cat => (
                                     <TableRow key={cat.id}>
                                         <TableCell className="font-medium">{cat.name}</TableCell>
                                         <TableCell>{cat.slug}</TableCell>
@@ -185,7 +202,7 @@ export default function CategoriesPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <AddCategoryForm />
+                        <AddCategoryForm onCategoryAdded={refreshCategories} />
                     </CardContent>
                 </Card>
                 <Card>
@@ -226,6 +243,7 @@ export default function CategoriesPage() {
                     category={editingCategory} 
                     open={!!editingCategory} 
                     onOpenChange={(open) => !open && setEditingCategory(null)}
+                    onCategoryUpdated={refreshCategories}
                 />
             )}
         </div>

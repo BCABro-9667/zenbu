@@ -1,3 +1,4 @@
+
 'use server';
 
 import { generateProductDescription } from '@/ai/flows/product-description-generator';
@@ -79,8 +80,8 @@ const productSchema = z.object({
     brochureUrl: z.string().url().optional().or(z.literal('')),
 });
 
-export async function addProductAction(prevState: any, formData: FormData) {
-    const validatedFields = productSchema.safeParse(Object.fromEntries(formData.entries()));
+export async function addProductAction(prevState: any, formData: any) {
+    const validatedFields = productSchema.safeParse(formData);
 
     if (!validatedFields.success) {
         return {
@@ -103,11 +104,12 @@ export async function addProductAction(prevState: any, formData: FormData) {
         });
     } catch (e) {
         console.error(e);
-        return { message: 'Database error: Failed to add product.' };
+        return { message: 'Storage error: Failed to add product.' };
     }
 
     revalidatePath('/admin/products');
-    redirect('/admin/products');
+    // Cannot redirect from here as it's not a form action directly on the page
+    return { message: 'success' };
 }
 
 const categorySchema = z.object({
@@ -127,7 +129,7 @@ export async function addCategoryAction(prevState: any, formData: FormData) {
         return { message: 'success' };
     } catch (e) {
         console.error(e);
-        return { message: 'Database error: Failed to add category.' };
+        return { message: 'Storage error: Failed to add category.' };
     }
 }
 
@@ -148,7 +150,7 @@ export async function updateCategoryAction(prevState: any, formData: FormData) {
         revalidatePath('/category/[slug]', 'layout');
         return { message: 'success' };
     } catch (e: any) {
-        return { message: e.message || 'Database error: Failed to update category.' };
+        return { message: e.message || 'Storage error: Failed to update category.' };
     }
 }
 
@@ -159,7 +161,7 @@ export async function deleteProductAction(id: string) {
         revalidatePath('/admin/products');
     } catch (e) {
         console.error(e);
-        return { message: 'Database error: Failed to delete product.' };
+        return { message: 'Storage error: Failed to delete product.' };
     }
 }
 
@@ -169,7 +171,7 @@ export async function deleteCategoryAction(id: string) {
         revalidatePath('/admin/categories');
     } catch (e) {
         console.error(e);
-        return { message: 'Database error: Failed to delete category.' };
+        return { message: 'Storage error: Failed to delete category.' };
     }
 }
 
@@ -181,6 +183,6 @@ export async function updateOrderStatusAction(orderId: string, status: Order['st
         return { message: 'success' };
     } catch (e) {
         console.error(e);
-        return { message: 'Database error: Failed to update order status.' };
+        return { message: 'Storage error: Failed to update order status.' };
     }
 }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -17,6 +18,7 @@ import { Loader2, Wand2 } from "lucide-react";
 import type { Category } from '@/lib/definitions';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -34,9 +36,16 @@ const productSchema = z.object({
 type ProductFormData = z.infer<typeof productSchema>;
 
 export default function NewProductForm() {
-    const categories = useMemo(() => getCategories(), []);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const { toast } = useToast();
+    const router = useRouter();
     const [isGenerating, startDescriptionGeneration] = useTransition();
+
+    useEffect(() => {
+        setCategories(getCategories());
+        setIsLoadingCategories(false);
+    }, []);
 
     const { register, handleSubmit, formState: { errors }, setValue, watch, control } = useForm<ProductFormData>({
         resolver: zodResolver(productSchema),
@@ -60,6 +69,11 @@ export default function NewProductForm() {
             const result = await generateDescriptionAction(null, formData);
             if(result.description) {
                 setValue('description', result.description, { shouldValidate: true });
+                // Use the TinyMCE API to set content if the editor is initialized
+                const editor = (window as any).tinymce?.get('description-editor');
+                if (editor) {
+                    editor.setContent(result.description);
+                }
                 toast({ title: "Description generated successfully!" });
             } else {
                 toast({ title: "Error", description: result.message, variant: "destructive" });
@@ -68,14 +82,17 @@ export default function NewProductForm() {
     };
 
     useEffect(() => {
-        if (formState?.message && formState.message !== 'success') {
+        if (formState?.message === 'success') {
+             toast({ title: 'Product added successfully!' });
+             router.push('/admin/products');
+        } else if (formState?.message) {
             toast({
                 title: "Error adding product",
                 description: formState.message,
                 variant: "destructive"
             });
         }
-    }, [formState, toast]);
+    }, [formState, toast, router]);
 
     const SubmitButton = () => {
         const { pending } = useFormStatus();
@@ -87,7 +104,7 @@ export default function NewProductForm() {
     };
 
     return (
-        <form action={formAction} className="grid gap-8 md:grid-cols-3">
+        <form onSubmit={handleSubmit((data) => formAction(data))} className="grid gap-8 md:grid-cols-3">
             <div className="md:col-span-2 grid gap-6">
                 <Card>
                     <CardHeader>
@@ -107,7 +124,7 @@ export default function NewProductForm() {
                         </div>
                         <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                               <Label htmlFor="description">Description</Label>
+                               <Label htmlFor="description-editor">Description</Label>
                                 <Button type="button" size="sm" variant="outline" className="flex items-center gap-2" onClick={handleGenerateDescription} disabled={isGenerating}>
                                     {isGenerating ? <Loader2 className="animate-spin" /> : <Wand2 />}
                                     {isGenerating ? "Generating..." : "Generate with AI"}
@@ -118,6 +135,7 @@ export default function NewProductForm() {
                                 control={control}
                                 render={({ field }) => (
                                     <Editor
+                                        id="description-editor"
                                         apiKey='p2yks470qo6wqku09s7bsqaqqnb9lgno6bgvbbsa42pezja1'
                                         value={field.value}
                                         onEditorChange={(content) => field.onChange(content)}
@@ -165,7 +183,7 @@ export default function NewProductForm() {
                                 name="category"
                                 control={control}
                                 render={({ field }) => (
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoadingCategories}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a category" />
                                         </SelectTrigger>

@@ -1,3 +1,4 @@
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -51,7 +52,8 @@ export async function placeOrder(
   const { name, email, phone, address } = validatedFields.data;
 
   try {
-    await addOrder({
+    // This will now write to localStorage
+    addOrder({
       items: cartItems,
       customer: { name, email, phone, address },
       total,
@@ -60,10 +62,12 @@ export async function placeOrder(
   } catch (error) {
     console.error(error);
     return {
-      message: 'Database Error: Failed to Place Order.',
+      message: 'Storage Error: Failed to Place Order.',
     };
   }
   
+  // Revalidation might not be strictly necessary for client-side localStorage,
+  // but it's good practice if you ever switch back to a server-based data source.
   revalidatePath('/admin/orders');
   return { message: 'success' };
 }
@@ -102,14 +106,15 @@ export async function submitContactForm(prevState: ContactState | null, formData
   }
 
   try {
-    await addLead(validatedFields.data);
+     // This will now write to localStorage
+    addLead(validatedFields.data);
   } catch (error) {
     console.error(error);
     return {
-      message: 'Database Error: Failed to Submit Message.',
+      message: 'Storage Error: Failed to Submit Message.',
     };
   }
 
-  revalidatePath('/admin/leads'); // Assuming you'll have a leads page
+  revalidatePath('/admin/leads'); // You would need to create this page to see leads
   return { message: 'success' };
 }

@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -39,14 +40,26 @@ import { deleteProductAction } from "@/lib/admin-actions";
 import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@/lib/definitions";
 import { getProducts } from "@/lib/data";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductsPage() {
-    const products = useMemo(() => getProducts(), []);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     
     const [isPending, startTransition] = useTransition();
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [productToDelete, setProductToDelete] = useState<Product | null>(null);
     const { toast } = useToast();
+
+    const refreshProducts = () => {
+        setIsLoading(true);
+        setProducts(getProducts());
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
+        refreshProducts();
+    }, []);
 
     const handleDeleteClick = (product: Product) => {
         setProductToDelete(product);
@@ -62,6 +75,7 @@ export default function ProductsPage() {
                 toast({ title: 'Error', description: result.message, variant: 'destructive' });
             } else {
                 toast({ title: 'Product Deleted', description: `${productToDelete.name} has been deleted.` });
+                refreshProducts();
             }
             setShowDeleteDialog(false);
             setProductToDelete(null);
@@ -99,7 +113,9 @@ export default function ProductsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {products?.map(product => (
+                        {isLoading ? (
+                            <TableRow><TableCell colSpan={6} className="h-24 text-center">Loading products...</TableCell></TableRow>
+                        ) : products?.map(product => (
                         <TableRow key={product.id}>
                             <TableCell className="hidden sm:table-cell">
                                 <div className="relative aspect-square h-16 w-16 rounded-md">

@@ -1,5 +1,6 @@
+
 'use client';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { PageHeader } from "@/components/admin/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,12 +10,18 @@ import { format } from "date-fns";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { getOrders } from '@/lib/data';
-import type { Order } from "@/lib/definitions";
+import type { Order, OrderStatus } from "@/lib/definitions";
 
 export default function OrdersPage() {
-    const orders = useMemo(() => getOrders(), []);
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const getStatusVariant = (status: string): "destructive" | "success" | "secondary" | "default" => {
+    useEffect(() => {
+        setOrders(getOrders());
+        setIsLoading(false);
+    }, []);
+
+    const getStatusVariant = (status: OrderStatus): "destructive" | "success" | "secondary" | "default" => {
         switch (status) {
             case 'Pending':
                 return 'destructive';
@@ -48,7 +55,9 @@ export default function OrdersPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {(orders && orders.length > 0) ? orders.map(order => (
+                            {isLoading ? (
+                                <TableRow><TableCell colSpan={5} className="text-center h-24">Loading orders...</TableCell></TableRow>
+                            ) : (orders && orders.length > 0) ? orders.map(order => (
                                 <TableRow key={order.id}>
                                     <TableCell>
                                         <div className="font-medium">{order.customer.name}</div>

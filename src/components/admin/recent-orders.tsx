@@ -1,6 +1,7 @@
+
 'use client';
 import Link from "next/link";
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,10 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Order } from "@/lib/definitions";
+import type { Order, OrderStatus } from "@/lib/definitions";
 import { getRecentOrders } from "@/lib/data";
 
-const getStatusVariant = (status: Order['status']): "destructive" | "success" | "secondary" | "default" => {
+const getStatusVariant = (status: OrderStatus): "destructive" | "success" | "secondary" | "default" => {
     switch (status) {
         case 'Pending':
             return 'destructive';
@@ -36,7 +37,13 @@ const getStatusVariant = (status: Order['status']): "destructive" | "success" | 
 };
 
 export function RecentOrders() {
-  const recentOrders = useMemo(() => getRecentOrders(5), []);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setRecentOrders(getRecentOrders(5));
+    setIsLoading(false);
+  }, []);
 
   return (
     <Card>
@@ -65,7 +72,9 @@ export function RecentOrders() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {recentOrders && recentOrders.length > 0 ? recentOrders.map(order => (
+            {isLoading ? (
+                <TableRow><TableCell colSpan={4} className="h-24 text-center">Loading recent orders...</TableCell></TableRow>
+            ) : recentOrders && recentOrders.length > 0 ? recentOrders.map(order => (
                 <TableRow key={order.id}>
                     <TableCell>
                         <div className="font-medium">{order.customer.name}</div>

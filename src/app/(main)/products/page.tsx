@@ -1,23 +1,32 @@
+
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getProducts, getCategories } from '@/lib/data';
 import type { Product, Category } from '@/lib/definitions';
 import ProductCard from '@/components/main/product-card';
 import { Search } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductsPage() {
-  const allProducts = useMemo(() => getProducts(), []);
-  const allCategories = useMemo(() => getCategories(), []);
-  
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setAllProducts(getProducts());
+    setAllCategories(getCategories());
+    setIsLoading(false);
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState('newest');
 
   const filteredAndSortedProducts = useMemo(() => {
-    let products = allProducts;
+    let products = [...allProducts];
 
     if (searchTerm) {
       products = products.filter(product =>
@@ -48,7 +57,7 @@ export default function ProductsPage() {
       case 'newest':
       default:
         // Assuming higher ID means newer, or use a date if available
-        products.sort((a, b) => b.id.localeCompare(a.id));
+        products.sort((a, b) => parseInt(b.id, 10) - parseInt(a.id, 10));
         break;
     }
 
@@ -69,7 +78,7 @@ export default function ProductsPage() {
           />
         </div>
         <div className="flex gap-4">
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory} disabled={isLoading}>
             <SelectTrigger className="w-full md:w-[200px] h-11">
               <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
@@ -82,7 +91,7 @@ export default function ProductsPage() {
               ))}
             </SelectContent>
           </Select>
-          <Select value={sortOrder} onValueChange={setSortOrder}>
+          <Select value={sortOrder} onValueChange={setSortOrder} disabled={isLoading}>
             <SelectTrigger className="w-full md:w-[200px] h-11">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
@@ -97,7 +106,17 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {filteredAndSortedProducts.length > 0 ? (
+      {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                    <Skeleton className="h-64 w-full" />
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-8 w-1/2" />
+                </div>
+            ))}
+          </div>
+      ) : filteredAndSortedProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredAndSortedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />

@@ -1,9 +1,38 @@
+
+'use client';
+
 import { PlaceHolderImages } from './placeholder-images';
 import type { Product, Category, Order, Lead, CartItem } from './definitions';
 
-// --- MOCK DATA ---
+// --- LOCALSTORAGE HELPERS ---
 
-let products: Product[] = [
+function getFromLocalStorage<T>(key: string, defaultValue: T): T {
+  if (typeof window === 'undefined') {
+    return defaultValue;
+  }
+  try {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    console.error(`Error reading from localStorage key “${key}”:`, error);
+    return defaultValue;
+  }
+}
+
+function saveToLocalStorage<T>(key: string, value: T) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error writing to localStorage key “${key}”:`, error);
+  }
+}
+
+// --- INITIAL MOCK DATA ---
+
+const defaultProducts: Product[] = [
     { id: '1', name: 'Minimalist Wooden Chair', description: 'A sleek and simple chair made from solid oak.', longDescription: 'Crafted from high-quality solid oak, this minimalist wooden chair combines timeless design with exceptional comfort. Its clean lines and natural finish make it a versatile addition to any room, whether as a dining chair, a desk chair, or a standalone accent piece. The ergonomic design ensures comfortable seating for extended periods, and its sturdy construction guarantees durability for years to come.', price: 150, imageUrl: PlaceHolderImages.find(p => p.id === 'product-1')?.imageUrl || '', galleryImageUrls: [PlaceHolderImages.find(p => p.id === 'gallery-1-1')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-1-2')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-1-3')?.imageUrl || ''], imageHint: 'wooden chair', category: 'Chairs', isTopRated: true, isTopSale: false, isRecent: true, stock: 15, videoUrl: 'https://www.youtube.com/watch?v=LXb3EKWsInQ' },
     { id: '2', name: 'Modern Velvet Sofa', description: 'A luxurious sofa upholstered in soft green velvet.', longDescription: 'Transform your living space with this luxurious modern sofa, upholstered in a rich, soft green velvet. Its plush cushions and deep seating provide unparalleled comfort, perfect for lounging or entertaining guests. The elegant design, featuring clean lines and tapered wooden legs, adds a touch of sophistication to any contemporary home.', price: 850, imageUrl: PlaceHolderImages.find(p => p.id === 'product-2')?.imageUrl || '', galleryImageUrls: [PlaceHolderImages.find(p => p.id === 'gallery-2-1')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-2-2')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-2-3')?.imageUrl || ''], imageHint: 'velvet sofa', category: 'Sofas', isTopRated: true, isTopSale: true, isRecent: true, stock: 8, brochureUrl: '#' },
     { id: '3', name: 'Sleek Metal Bookshelf', description: 'An industrial-style bookshelf with five spacious shelves.', longDescription: 'Organize your books and display your favorite decor with this sleek, industrial-style bookshelf. Featuring a sturdy metal frame and five spacious wooden shelves, it offers ample storage without compromising on style. Its open design creates a sense of space, making it an ideal choice for living rooms, offices, or bedrooms.', price: 300, imageUrl: PlaceHolderImages.find(p => p.id === 'product-3')?.imageUrl || '', galleryImageUrls: [PlaceHolderImages.find(p => p.id === 'gallery-3-1')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-3-2')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-3-3')?.imageUrl || ''], imageHint: 'metal bookshelf', category: 'Storage', isTopRated: false, isTopSale: false, isRecent: true, stock: 20 },
@@ -18,7 +47,7 @@ let products: Product[] = [
     { id: '12', name: 'Patio Lounge Set', description: 'A comfortable and durable outdoor lounge set.', longDescription: 'Create the perfect outdoor oasis with this comfortable and durable patio lounge set. It includes a two-seater sofa, two armchairs, and a coffee table, all made from weather-resistant materials. The plush cushions are designed for comfort and are covered in a fade-resistant fabric.', price: 950, imageUrl: PlaceHolderImages.find(p => p.id === 'product-12')?.imageUrl || '', galleryImageUrls: [PlaceHolderImages.find(p => p.id === 'gallery-12-1')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-12-2')?.imageUrl || '', PlaceHolderImages.find(p => p.id === 'gallery-12-3')?.imageUrl || ''], imageHint: 'patio set', category: 'Outdoor', isTopRated: true, isTopSale: false, isRecent: false, stock: 5 },
 ];
 
-let categories: Category[] = [
+const defaultCategories: Category[] = [
     { id: '1', name: 'Chairs', slug: 'chairs', imageUrl: PlaceHolderImages.find(p => p.id === 'category-1')?.imageUrl || '', imageHint: 'armchair' },
     { id: '2', name: 'Sofas', slug: 'sofas', imageUrl: PlaceHolderImages.find(p => p.id === 'category-2')?.imageUrl || '', imageHint: 'sofa' },
     { id: '3', name: 'Tables', slug: 'tables', imageUrl: PlaceHolderImages.find(p => p.id === 'category-3')?.imageUrl || '', imageHint: 'dining table' },
@@ -28,73 +57,86 @@ let categories: Category[] = [
     { id: '7', name: 'Outdoor', slug: 'outdoor', imageUrl: PlaceHolderImages.find(p => p.id === 'category-5')?.imageUrl || '', imageHint: 'patio chair' },
 ];
 
-let orders: Order[] = [
+const defaultOrders: Order[] = [
     { id: '1', items: [{ id: '1', name: 'Minimalist Wooden Chair', price: 150, imageUrl: PlaceHolderImages.find(p => p.id === 'product-1')?.imageUrl || '', imageHint: 'wooden chair', quantity: 2 }], customer: { name: 'John Doe', email: 'john@example.com', phone: '123-456-7890', address: '123 Main St' }, total: 300, createdAt: new Date(), status: 'Delivered' },
     { id: '2', items: [{ id: '6', name: 'Ergonomic Office Chair', price: 250, imageUrl: PlaceHolderImages.find(p => p.id === 'product-6')?.imageUrl || '', imageHint: 'office chair', quantity: 1 }], customer: { name: 'Jane Smith', email: 'jane@example.com', phone: '987-654-3210', address: '456 Oak Ave' }, total: 250, createdAt: new Date(Date.now() - 86400000), status: 'Pending' },
     { id: '3', items: [{ id: '2', name: 'Modern Velvet Sofa', price: 850, imageUrl: PlaceHolderImages.find(p => p.id === 'product-2')?.imageUrl || '', imageHint: 'velvet sofa', quantity: 1 }], customer: { name: 'Peter Jones', email: 'peter@example.com', phone: '555-555-5555', address: '789 Pine Ln' }, total: 850, createdAt: new Date(Date.now() - 172800000), status: 'Shipped' },
 ];
 
-let leads: Lead[] = [];
 
 // --- Products ---
 export function getProducts() {
-    return products;
+    return getFromLocalStorage('products', defaultProducts);
 }
 
 export function getProductById(id: string) {
+    const products = getProducts();
     return products.find(p => p.id === id);
 }
 
 export function addProduct(productData: Omit<Product, 'id'>) {
-    const newId = (Math.max(...products.map(p => parseInt(p.id, 10))) + 1).toString();
+    const products = getProducts();
+    const newId = (Math.max(0, ...products.map(p => parseInt(p.id, 10))) + 1).toString();
     const newProduct: Product = { ...productData, id: newId };
-    products.push(newProduct);
+    saveToLocalStorage('products', [...products, newProduct]);
     return newId;
 }
 
 export function updateProduct(id: string, productData: Partial<Product>) {
+    let products = getProducts();
     products = products.map(p => (p.id === id ? { ...p, ...productData } : p));
+    saveToLocalStorage('products', products);
 }
 
 export function deleteProduct(id: string) {
+    let products = getProducts();
     products = products.filter(p => p.id !== id);
+    saveToLocalStorage('products', products);
 }
 
 // --- Categories ---
 export function getCategories() {
-    return categories;
+    return getFromLocalStorage('categories', defaultCategories);
 }
 
 export function getCategoryBySlug(slug: string) {
+    const categories = getCategories();
     return categories.find(c => c.slug === slug);
 }
 
 export function addCategory(categoryData: Omit<Category, 'id' | 'slug' | 'imageUrl' | 'imageHint'>) {
-    const newId = (Math.max(...categories.map(c => parseInt(c.id, 10))) + 1).toString();
+    const categories = getCategories();
+    const newId = (Math.max(0, ...categories.map(c => parseInt(c.id, 10))) + 1).toString();
     const slug = categoryData.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-    const newCategory: Category = { 
-        ...categoryData, 
-        id: newId, 
+    const newCategory: Category = {
+        ...categoryData,
+        id: newId,
         slug,
         imageUrl: `https://picsum.photos/seed/${slug}/400/400`,
         imageHint: categoryData.name.toLowerCase()
     };
-    categories.push(newCategory);
+    saveToLocalStorage('categories', [...categories, newCategory]);
     return newId;
 }
 
 export function updateCategory(id: string, categoryData: Partial<Category>) {
+    let categories = getCategories();
     const slug = categoryData.name?.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
     categories = categories.map(c => (c.id === id ? { ...c, ...categoryData, ...(slug && { slug }) } : c));
+    saveToLocalStorage('categories', categories);
 }
 
 export function deleteCategory(id: string) {
+    let categories = getCategories();
     categories = categories.filter(c => c.id !== id);
+    saveToLocalStorage('categories', categories);
 }
 
 // --- Orders ---
 export function getOrders() {
-    return orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    const orders = getFromLocalStorage<any[]>('orders', defaultOrders);
+    // Dates are stored as strings in JSON, so we need to convert them back
+    return orders.map(o => ({...o, createdAt: new Date(o.createdAt)})).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 }
 
 export function getRecentOrders(count: number = 5) {
@@ -103,34 +145,44 @@ export function getRecentOrders(count: number = 5) {
 
 
 export function getOrderById(id: string) {
+    const orders = getOrders();
     return orders.find(o => o.id === id);
 }
 
 export function addOrder(orderData: Omit<Order, 'id' | 'createdAt'>) {
-    const newId = (orders.length > 0 ? Math.max(...orders.map(o => parseInt(o.id, 10))) : 0) + 1;
+    const orders = getOrders();
+    const newId = (orders.length > 0 ? Math.max(0, ...orders.map(o => parseInt(o.id, 10))) : 0) + 1;
     const newOrder: Order = {
         ...orderData,
         id: String(newId),
         createdAt: new Date(),
     };
-    orders.push(newOrder);
+    saveToLocalStorage('orders', [...orders, newOrder]);
     return String(newId);
 }
 
 export function updateOrderStatus(id: string, status: Order['status']) {
+    let orders = getOrders();
     orders = orders.map(o => (o.id === id ? { ...o, status } : o));
+    saveToLocalStorage('orders', orders);
 }
 
 
 // --- Leads ---
+export function getLeads() {
+    const leads = getFromLocalStorage<any[]>('leads', []);
+    return leads.map(l => ({...l, dateCreated: new Date(l.dateCreated)}));
+}
+
 export function addLead(leadData: Omit<Lead, 'id' | 'dateCreated'>) {
-    const newId = (leads.length > 0 ? Math.max(...leads.map(l => parseInt(l.id, 10))) : 0) + 1;
+    const leads = getLeads();
+    const newId = (leads.length > 0 ? Math.max(0, ...leads.map(l => parseInt(l.id, 10))) : 0) + 1;
     const newLead: Lead = {
         ...leadData,
         id: String(newId),
         dateCreated: new Date(),
     };
-    leads.push(newLead);
+    saveToLocalStorage('leads', [...leads, newLead]);
     return String(newId);
 }
 
