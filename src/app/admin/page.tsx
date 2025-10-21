@@ -1,25 +1,25 @@
 'use client';
-import { useMemo } from 'react';
 import { PageHeader } from "@/components/admin/page-header";
 import { RecentOrders } from "@/components/admin/recent-orders";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingCart, Tag } from "lucide-react";
 import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useMemoFirebase } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import type { Product, Category, Order } from '@/lib/definitions';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useMemo } from "react";
 
 export default function AdminDashboard() {
     const firestore = useFirestore();
     
-    const productsCollection = useMemo(() => collection(firestore, 'products'), [firestore]);
+    const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
     const { data: products, isLoading: productsLoading } = useCollection<Product>(productsCollection);
 
-    const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
     const { data: categories, isLoading: categoriesLoading } = useCollection<Category>(categoriesCollection);
 
-    const ordersCollection = useMemo(() => collection(firestore, 'orders'), [firestore]);
+    const ordersCollection = useMemoFirebase(() => collection(firestore, 'orders'), [firestore]);
     const { data: orders, isLoading: ordersLoading } = useCollection<Order>(ordersCollection);
 
     const totalRevenue = useMemo(() => orders?.reduce((sum, order) => sum + order.total, 0) || 0, [orders]);

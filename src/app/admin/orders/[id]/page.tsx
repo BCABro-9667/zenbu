@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import { useMemo, useTransition } from 'react';
+import { useTransition } from 'react';
 import { format } from 'date-fns';
 import {
   MoreVertical,
@@ -44,7 +44,7 @@ import { updateOrderStatusAction } from '@/lib/admin-actions';
 import type { Order, OrderStatus } from '@/lib/definitions';
 import Image from 'next/image';
 import { useDoc } from '@/firebase/firestore/use-doc';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -80,7 +80,7 @@ const getStatusIcon = (status: OrderStatus) => {
 
 export default function OrderDetailsPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
-  const orderRef = useMemo(() => doc(firestore, 'orders', params.id), [firestore, params.id]);
+  const orderRef = useMemoFirebase(() => doc(firestore, 'orders', params.id), [firestore, params.id]);
   const { data: order, isLoading } = useDoc<Order>(orderRef);
 
   const [isPending, startTransition] = useTransition();

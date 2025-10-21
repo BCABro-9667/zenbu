@@ -1,5 +1,4 @@
 'use client';
-import { useMemo } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import type { Order } from "@/lib/definitions";
 import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore } from "@/firebase";
+import { useFirestore, useMemoFirebase } from "@/firebase";
 import { collection, query, orderBy, limit } from "firebase/firestore";
 
 const getStatusVariant = (status: Order['status']): "destructive" | "success" | "secondary" | "default" => {
@@ -39,7 +38,7 @@ const getStatusVariant = (status: Order['status']): "destructive" | "success" | 
 
 export function RecentOrders() {
   const firestore = useFirestore();
-  const recentOrdersQuery = useMemo(() => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc'), limit(5)), [firestore]);
+  const recentOrdersQuery = useMemoFirebase(() => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc'), limit(5)), [firestore]);
   const { data: recentOrders, isLoading } = useCollection<Order>(recentOrdersQuery);
 
   return (

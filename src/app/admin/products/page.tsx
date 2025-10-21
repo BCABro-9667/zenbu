@@ -39,12 +39,12 @@ import { deleteProductAction } from "@/lib/admin-actions";
 import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@/lib/definitions";
 import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore } from "@/firebase";
+import { useFirestore, useMemoFirebase } from "@/firebase";
 import { collection } from "firebase/firestore";
 
 export default function ProductsPage() {
     const firestore = useFirestore();
-    const productsCollection = useMemo(() => collection(firestore, 'products'), [firestore]);
+    const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
     const { data: products, isLoading } = useCollection<Product>(productsCollection);
     
     const [isPending, startTransition] = useTransition();

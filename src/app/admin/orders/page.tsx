@@ -1,5 +1,4 @@
 'use client';
-import { useMemo } from "react";
 import { PageHeader } from "@/components/admin/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,13 +8,13 @@ import { format } from "date-fns";
 import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore } from "@/firebase";
+import { useFirestore, useMemoFirebase } from "@/firebase";
 import { collection, query, orderBy } from "firebase/firestore";
 import type { Order } from "@/lib/definitions";
 
 export default function OrdersPage() {
     const firestore = useFirestore();
-    const ordersCollection = useMemo(() => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc')), [firestore]);
+    const ordersCollection = useMemoFirebase(() => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc')), [firestore]);
     const { data: orders, isLoading } = useCollection<Order>(ordersCollection);
 
     const getStatusVariant = (status: string): "destructive" | "success" | "secondary" | "default" => {

@@ -10,13 +10,13 @@ import { Edit, Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useFormStatus } from 'react-dom';
 import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction, updateCategoryAction } from "@/lib/admin-actions";
-import { useActionState, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import type { Category } from "@/lib/definitions";
 import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore } from "@/firebase";
+import { useFirestore, useMemoFirebase } from "@/firebase";
 import { collection } from "firebase/firestore";
 
 function AddCategoryForm() {
@@ -90,7 +90,7 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
 
 export default function CategoriesPage() {
     const firestore = useFirestore();
-    const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
     const { data: categories, isLoading } = useCollection<Category>(categoriesCollection);
 
     const [isPending, startTransition] = useTransition();

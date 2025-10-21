@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useFormStatus } from 'react-dom';
-import { useActionState, useEffect, useMemo, useState, useTransition } from 'react';
+import { useActionState, useEffect, useState, useTransition } from 'react';
 
 import { addProductAction, generateDescriptionAction } from '@/lib/admin-actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { useCollection } from '@/firebase/firestore/use-collection';
 import { collection } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useMemoFirebase } from '@/firebase';
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product name is required'),
@@ -37,7 +37,7 @@ type ProductFormData = z.infer<typeof productSchema>;
 
 export default function NewProductForm() {
     const firestore = useFirestore();
-    const categoriesCollection = useMemo(() => collection(firestore, 'categories'), [firestore]);
+    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
     const { data: categories, isLoading: areCategoriesLoading } = useCollection<Category>(categoriesCollection);
     
     const { toast } = useToast();
