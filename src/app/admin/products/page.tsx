@@ -38,14 +38,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { deleteProductAction } from "@/lib/admin-actions";
 import { useToast } from "@/hooks/use-toast";
 import type { Product } from "@/lib/definitions";
-import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore, useMemoFirebase } from "@/firebase";
-import { collection } from "firebase/firestore";
+import { getProducts } from "@/lib/data";
 
 export default function ProductsPage() {
-    const firestore = useFirestore();
-    const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
-    const { data: products, isLoading } = useCollection<Product>(productsCollection);
+    const products = useMemo(() => getProducts(), []);
     
     const [isPending, startTransition] = useTransition();
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -103,11 +99,7 @@ export default function ProductsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {isLoading ? (
-                            <TableRow>
-                                <TableCell colSpan={6} className="h-24 text-center">Loading products...</TableCell>
-                            </TableRow>
-                        ) : products?.map(product => (
+                        {products?.map(product => (
                         <TableRow key={product.id}>
                             <TableCell className="hidden sm:table-cell">
                                 <div className="relative aspect-square h-16 w-16 rounded-md">

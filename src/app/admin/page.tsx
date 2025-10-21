@@ -1,32 +1,21 @@
 'use client';
+import { useMemo } from 'react';
 import { PageHeader } from "@/components/admin/page-header";
 import { RecentOrders } from "@/components/admin/recent-orders";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingCart, Tag } from "lucide-react";
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirestore, useMemoFirebase } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { getProducts, getCategories, getOrders } from '@/lib/data';
 import type { Product, Category, Order } from '@/lib/definitions';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useMemo } from "react";
 
 export default function AdminDashboard() {
-    const firestore = useFirestore();
-    
-    const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
-    const { data: products, isLoading: productsLoading } = useCollection<Product>(productsCollection);
-
-    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
-    const { data: categories, isLoading: categoriesLoading } = useCollection<Category>(categoriesCollection);
-
-    const ordersCollection = useMemoFirebase(() => collection(firestore, 'orders'), [firestore]);
-    const { data: orders, isLoading: ordersLoading } = useCollection<Order>(ordersCollection);
+    const products = useMemo(() => getProducts(), []);
+    const categories = useMemo(() => getCategories(), []);
+    const orders = useMemo(() => getOrders(), []);
 
     const totalRevenue = useMemo(() => orders?.reduce((sum, order) => sum + order.total, 0) || 0, [orders]);
     const pendingOrders = useMemo(() => orders?.filter(o => o.status === 'Pending').length || 0, [orders]);
     
-    const isLoading = productsLoading || categoriesLoading || ordersLoading;
-
     return (
         <div>
             <PageHeader title="Dashboard" description="An overview of your store's performance." />
@@ -37,7 +26,7 @@ export default function AdminDashboard() {
                         <span className="text-2xl">₹</span>
                     </CardHeader>
                     <CardContent>
-                        {isLoading ? <Skeleton className="h-8 w-3/4"/> : <div className="text-2xl font-bold">₹{totalRevenue.toFixed(2)}</div>}
+                        <div className="text-2xl font-bold">₹{totalRevenue.toFixed(2)}</div>
                         <p className="text-xs text-muted-foreground">Total revenue from all sales</p>
                     </CardContent>
                 </Card>
@@ -47,7 +36,7 @@ export default function AdminDashboard() {
                         <Package className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                         {isLoading ? <Skeleton className="h-8 w-1/4"/> : <div className="text-2xl font-bold">{products?.length || 0}</div>}
+                         <div className="text-2xl font-bold">{products?.length || 0}</div>
                         <p className="text-xs text-muted-foreground">The total number of products in your store</p>
                     </CardContent>
                 </Card>
@@ -57,7 +46,7 @@ export default function AdminDashboard() {
                         <Tag className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        {isLoading ? <Skeleton className="h-8 w-1/4"/> : <div className="text-2xl font-bold">{categories?.length || 0}</div>}
+                        <div className="text-2xl font-bold">{categories?.length || 0}</div>
                         <p className="text-xs text-muted-foreground">The total number of product categories</p>
                     </CardContent>
                 </Card>
@@ -67,7 +56,7 @@ export default function AdminDashboard() {
                         <ShoppingCart className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                         {isLoading ? <Skeleton className="h-8 w-1/4"/> : <div className="text-2xl font-bold">{pendingOrders}</div>}
+                         <div className="text-2xl font-bold">{pendingOrders}</div>
                         <p className="text-xs text-muted-foreground">Orders that need to be processed</p>
                     </CardContent>
                 </Card>

@@ -9,12 +9,12 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Autoplay from "embla-carousel-autoplay"
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getHeroSliderImages } from '@/lib/data';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 
 export default function HeroSlider() {
-  const heroImages = PlaceHolderImages.filter(image => image.id.startsWith('hero-'));
+  const heroImages = getHeroSliderImages();
 
   return (
     <section className="w-full">

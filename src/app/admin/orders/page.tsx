@@ -1,4 +1,5 @@
 'use client';
+import { useMemo } from 'react';
 import { PageHeader } from "@/components/admin/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,15 +8,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { format } from "date-fns";
 import { Eye } from "lucide-react";
 import Link from "next/link";
-import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore, useMemoFirebase } from "@/firebase";
-import { collection, query, orderBy } from "firebase/firestore";
+import { getOrders } from '@/lib/data';
 import type { Order } from "@/lib/definitions";
 
 export default function OrdersPage() {
-    const firestore = useFirestore();
-    const ordersCollection = useMemoFirebase(() => query(collection(firestore, 'orders'), orderBy('createdAt', 'desc')), [firestore]);
-    const { data: orders, isLoading } = useCollection<Order>(ordersCollection);
+    const orders = useMemo(() => getOrders(), []);
 
     const getStatusVariant = (status: string): "destructive" | "success" | "secondary" | "default" => {
         switch (status) {
@@ -51,9 +48,7 @@ export default function OrdersPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {isLoading ? (
-                                <TableRow><TableCell colSpan={5} className="text-center h-24">Loading orders...</TableCell></TableRow>
-                            ) : (orders && orders.length > 0) ? orders.map(order => (
+                            {(orders && orders.length > 0) ? orders.map(order => (
                                 <TableRow key={order.id}>
                                     <TableCell>
                                         <div className="font-medium">{order.customer.name}</div>
@@ -67,7 +62,7 @@ export default function OrdersPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell">
-                                        {order.createdAt ? format(new Date(order.createdAt.toDate()), "PPP") : 'N/A'}
+                                        {order.createdAt ? format(new Date(order.createdAt), "PPP") : 'N/A'}
                                     </TableCell>
                                     <TableCell className="text-right">₹{order.total.toFixed(2)}</TableCell>
                                     <TableCell className="text-right">

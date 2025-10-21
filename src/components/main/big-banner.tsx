@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { getBannerImage } from '@/lib/data';
 
 export default function BigBanner() {
-  const bannerImage = PlaceHolderImages.find(img => img.id === 'banner-1');
+  const bannerImage = getBannerImage();
 
   if (!bannerImage) {
     return null; // Or a fallback

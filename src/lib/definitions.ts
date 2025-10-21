@@ -1,5 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
 export type Product = {
   id: string;
   name: string;
@@ -17,7 +15,6 @@ export type Product = {
   videoUrl?: string;
   brochureUrl?: string;
   specifications?: Record<string, string>;
-  createdAt?: Timestamp;
 };
 
 export type Category = {
@@ -26,7 +23,6 @@ export type Category = {
   slug: string;
   imageUrl: string;
   imageHint: string;
-  createdAt?: Timestamp;
 };
 
 export type CartItem = {
@@ -50,15 +46,15 @@ export type Order = {
     address: string;
   };
   total: number;
-  createdAt: Timestamp;
+  createdAt: Date;
   status: OrderStatus;
 };
 
 export type Lead = {
     id: string;
     name: string;
-    email: string;
+    email?: string;
     phone: string;
     message: string;
-    dateCreated: Timestamp;
+    dateCreated: Date;
 }

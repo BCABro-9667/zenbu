@@ -2,36 +2,31 @@
 
 import ProductCard from '@/components/main/product-card';
 import { notFound } from 'next/navigation';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, where } from 'firebase/firestore';
+import { getProducts, getCategoryBySlug } from '@/lib/data';
 import { useMemo } from 'react';
 import type { Product, Category } from '@/lib/definitions';
-import { useDoc } from '@/firebase/firestore/use-doc';
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const firestore = useFirestore();
+  const category = useMemo(() => getCategoryBySlug(params.slug), [params.slug]);
+  const allProducts = useMemo(() => getProducts(), []);
   
-  // There's no good way to get a single document by a field other than ID with hooks, so we query for it.
-  const categoryQuery = useMemoFirebase(() => query(collection(firestore, 'categories'), where('slug', '==', params.slug)), [firestore, params.slug]);
-  const { data: categoryData, isLoading: isCategoryLoading } = useCollection<Category>(categoryQuery);
-  const category = useMemo(() => categoryData?.[0], [categoryData]);
+  const products = useMemo(() => {
+    if (!category) return [];
+    return allProducts.filter(p => p.category === category.name);
+  }, [allProducts, category]);
 
-  const productsQuery = useMemoFirebase(() => category ? query(collection(firestore, 'products'), where('category', '==', category.name)) : null, [firestore, category]);
-  const { data: products, isLoading: areProductsLoading } = useCollection<Product>(productsQuery);
-
-  if (!isCategoryLoading && !category) {
+  if (!category) {
     notFound();
   }
 
   return (
     <div className="container py-12">
-      <h1 className="text-4xl font-bold tracking-tight text-center mb-4">{category?.name}</h1>
+      <h1 className="text-4xl font-bold tracking-tight text-center mb-4">{category.name}</h1>
       <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10">
-        Browse our curated collection of high-quality products for your {category?.name?.toLowerCase()}.
+        Browse our curated collection of high-quality products for your {category.name.toLowerCase()}.
       </p>
       
-      {(!areProductsLoading && products && products.length > 0) ? (
+      {(products && products.length > 0) ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />

@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from 'next/navigation';
-import { useTransition } from 'react';
+import { useMemo, useTransition } from 'react';
 import { format } from 'date-fns';
 import {
   MoreVertical,
@@ -41,11 +41,9 @@ import {
 } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { updateOrderStatusAction } from '@/lib/admin-actions';
+import { getOrderById } from '@/lib/data';
 import type { Order, OrderStatus } from '@/lib/definitions';
 import Image from 'next/image';
-import { useDoc } from '@/firebase/firestore/use-doc';
-import { useFirestore, useMemoFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const getStatusVariant = (
@@ -79,16 +77,10 @@ const getStatusIcon = (status: OrderStatus) => {
 };
 
 export default function OrderDetailsPage({ params }: { params: { id: string } }) {
-  const firestore = useFirestore();
-  const orderRef = useMemoFirebase(() => doc(firestore, 'orders', params.id), [firestore, params.id]);
-  const { data: order, isLoading } = useDoc<Order>(orderRef);
+  const order = useMemo(() => getOrderById(params.id), [params.id]);
 
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
-
-  if (isLoading) {
-    return <div className="p-4 sm:px-6"><Skeleton className="h-screen w-full" /></div>;
-  }
 
   if (!order) {
     notFound();
@@ -194,7 +186,7 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
               </CardContent>
                <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                 <div className="text-xs text-muted-foreground">
-                  Ordered on <time dateTime={order.createdAt.toDate().toISOString()}>{format(order.createdAt.toDate(), "PPP p")}</time>
+                  Ordered on <time dateTime={order.createdAt.toISOString()}>{format(order.createdAt, "PPP p")}</time>
                 </div>
               </CardFooter>
             </Card>

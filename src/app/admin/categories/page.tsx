@@ -10,14 +10,12 @@ import { Edit, Loader2, MoreHorizontal, PlusCircle, Trash, Wand2 } from "lucide-
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useFormStatus } from 'react-dom';
 import { addCategoryAction, deleteCategoryAction, suggestCategoriesAction, updateCategoryAction } from "@/lib/admin-actions";
-import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { useActionState, useEffect, useRef, useState, useTransition, useMemo } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { Category } from "@/lib/definitions";
-import { useCollection } from "@/firebase/firestore/use-collection";
-import { useFirestore, useMemoFirebase } from "@/firebase";
-import { collection } from "firebase/firestore";
+import { getCategories } from "@/lib/data";
 
 function AddCategoryForm() {
     const [state, formAction] = useActionState(addCategoryAction, { message: null });
@@ -89,10 +87,7 @@ function EditCategoryDialog({ category, onOpenChange, open }: { category: Catego
 }
 
 export default function CategoriesPage() {
-    const firestore = useFirestore();
-    const categoriesCollection = useMemoFirebase(() => collection(firestore, 'categories'), [firestore]);
-    const { data: categories, isLoading } = useCollection<Category>(categoriesCollection);
-
+    const categories = useMemo(() => getCategories(), []);
     const [isPending, startTransition] = useTransition();
     const { toast } = useToast();
     
@@ -151,9 +146,7 @@ export default function CategoriesPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {isLoading ? (
-                                    <TableRow><TableCell colSpan={3} className="text-center h-24">Loading categories...</TableCell></TableRow>
-                                ) : categories?.map(cat => (
+                                {categories?.map(cat => (
                                     <TableRow key={cat.id}>
                                         <TableCell className="font-medium">{cat.name}</TableCell>
                                         <TableCell>{cat.slug}</TableCell>

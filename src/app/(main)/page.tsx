@@ -5,15 +5,11 @@ import CategoryCircles from '@/components/main/category-circles';
 import ProductSection from '@/components/main/product-section';
 import BigBanner from '@/components/main/big-banner';
 import { useMemo } from 'react';
-import { useCollection } from '@/firebase/firestore/use-collection';
-import { collection } from 'firebase/firestore';
-import { useFirestore, useMemoFirebase } from '@/firebase';
+import { getProducts } from '@/lib/data';
 import type { Product } from '@/lib/definitions';
 
 export default function HomePage() {
-  const firestore = useFirestore();
-  const productsCollection = useMemoFirebase(() => collection(firestore, 'products'), [firestore]);
-  const { data: allProducts, isLoading } = useCollection<Product>(productsCollection);
+  const allProducts = useMemo(() => getProducts(), []);
 
   const topRatedProducts = useMemo(() => allProducts?.filter(p => p.isTopRated).slice(0, 4) || [], [allProducts]);
   const topSaleProducts = useMemo(() => allProducts?.filter(p => p.isTopSale).slice(0, 4) || [], [allProducts]);
@@ -25,10 +21,10 @@ export default function HomePage() {
         <HeroSlider />
       </div>
       <CategoryCircles />
-      <ProductSection title="Top Rated Products" products={topRatedProducts} isLoading={isLoading} />
-      <ProductSection title="Top Selling Products" products={topSaleProducts} isLoading={isLoading} />
+      <ProductSection title="Top Rated Products" products={topRatedProducts} />
+      <ProductSection title="Top Selling Products" products={topSaleProducts} />
       <BigBanner />
-      <ProductSection title="Recent Products" products={recentProducts} isLoading={isLoading} />
+      <ProductSection title="Recent Products" products={recentProducts} />
     </div>
   );
 }

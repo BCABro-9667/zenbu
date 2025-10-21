@@ -7,8 +7,6 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import type { Order } from './definitions';
-import { setDoc, doc } from 'firebase/firestore';
-import { db } from '@/firebase/config';
 
 // AI Actions
 export async function generateDescriptionAction(prevState: any, formData: FormData) {
@@ -94,7 +92,7 @@ export async function addProductAction(prevState: any, formData: FormData) {
     try {
         const galleryUrls = validatedFields.data.galleryImageUrls?.split(',').map(url => url.trim()).filter(url => url) || [];
         
-        await addProduct({
+        addProduct({
             ...validatedFields.data,
             longDescription: 'This is a default long description. Please edit it in the product management section.',
             galleryImageUrls: galleryUrls,
@@ -124,7 +122,7 @@ export async function addCategoryAction(prevState: any, formData: FormData) {
     }
 
     try {
-        await addCategory({ name: validatedFields.data.name });
+        addCategory({ name: validatedFields.data.name });
         revalidatePath('/admin/categories');
         return { message: 'success' };
     } catch (e) {
@@ -145,7 +143,7 @@ export async function updateCategoryAction(prevState: any, formData: FormData) {
     }
 
     try {
-        await updateCategory(validatedFields.data.id, { name: validatedFields.data.name });
+        updateCategory(validatedFields.data.id, { name: validatedFields.data.name });
         revalidatePath('/admin/categories');
         revalidatePath('/category/[slug]', 'layout');
         return { message: 'success' };
@@ -157,7 +155,7 @@ export async function updateCategoryAction(prevState: any, formData: FormData) {
 
 export async function deleteProductAction(id: string) {
     try {
-        await deleteProduct(id);
+        deleteProduct(id);
         revalidatePath('/admin/products');
     } catch (e) {
         console.error(e);
@@ -167,7 +165,7 @@ export async function deleteProductAction(id: string) {
 
 export async function deleteCategoryAction(id: string) {
     try {
-        await deleteCategory(id);
+        deleteCategory(id);
         revalidatePath('/admin/categories');
     } catch (e) {
         console.error(e);
@@ -177,7 +175,7 @@ export async function deleteCategoryAction(id: string) {
 
 export async function updateOrderStatusAction(orderId: string, status: Order['status']) {
     try {
-        await updateOrderStatus(orderId, status);
+        updateOrderStatus(orderId, status);
         revalidatePath('/admin/orders');
         revalidatePath(`/admin/orders/${orderId}`);
         return { message: 'success' };
