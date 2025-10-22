@@ -1,8 +1,9 @@
+
 const fs = require('fs');
 const path = require('path');
 
 const envContent = `# MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/zenbu
+MONGODB_URI=mongodb+srv://Avdhesh1:ya4XYnQUEtYhv5kr@cluster0.0uojesi.mongodb.net/zenbu
 
 # JWT Secret for authentication (change this in production)
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
