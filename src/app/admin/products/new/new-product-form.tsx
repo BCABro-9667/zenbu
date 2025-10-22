@@ -118,12 +118,12 @@ export default function NewProductForm() {
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="name">Product Name</Label>
-                            <Input id="name" placeholder="e.g. Modern Velvet Sofa" {...register('name')} />
+                            <Input id="name" placeholder="e.g. Digital Locker Safe" {...register('name')} />
                             {errors.name && <p className="text-sm font-medium text-destructive">{errors.name.message}</p>}
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="keywords">Keywords</Label>
-                            <Input id="keywords" placeholder="e.g. sofa, velvet, modern, living room" {...register('keywords')} />
+                            <Input id="keywords" placeholder="e.g. safe, security, digital, locker" {...register('keywords')} />
                             <p className="text-xs text-muted-foreground">Comma-separated keywords for AI generation.</p>
                         </div>
                         <div className="space-y-2">
@@ -182,11 +182,11 @@ export default function NewProductForm() {
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="metaTitle">Meta Title</Label>
-                            <Input id="metaTitle" placeholder="e.g. Modern Velvet Sofa | zenbu" {...register('metaTitle')} />
+                            <Input id="metaTitle" placeholder="e.g. Digital Locker Safe | Zenbu" {...register('metaTitle')} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="metaKeywords">Meta Keywords</Label>
-                            <Input id="metaKeywords" placeholder="e.g. sofa, velvet, modern" {...register('metaKeywords')} />
+                            <Input id="metaKeywords" placeholder="e.g. digital safe, home security, office locker" {...register('metaKeywords')} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="metaDescription">Meta Description</Label>
@@ -248,5 +248,3 @@ export default function NewProductForm() {
         </form>
     );
 }
-
-    

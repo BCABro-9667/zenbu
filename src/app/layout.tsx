@@ -5,8 +5,8 @@ import { CartProvider } from '@/context/cart-context';
 import { AuthProvider } from '@/context/auth-context';
 
 export const metadata: Metadata = {
-  title: 'zenbu',
-  description: 'A modern e-commerce application created with Firebase Studio.',
+  title: 'Zenbu - Home & Office Appliances',
+  description: 'Discover high-quality home and office appliances, including locker safes, gullaks, and customizable solutions. Shop now for innovative products.',
 };
 
 export default function RootLayout({
